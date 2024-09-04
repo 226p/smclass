@@ -40,15 +40,16 @@
       <input type="text" name="zipcode" id="zipcode">
       <button type="button" onclick="addBtn()">주소검색</button><br>
       <label>주소</label>
-      <input type="text" name="name" id="name"><br>
+      <input type="text" name="address1" id="address1">
+      <input type="text" name="address2" id="address2">
+      <br>
       <label>휴대전화</label>
-      <input type="text" name="name" id="name"><br>
+      <input type="number" name="phone" id="phone"><br>
 
     </form>
   </div>
   <script>
     function addBtn(){
-        //alert("다음주소를 호출합니다.");
         new daum.Postcode({
         oncomplete: function(data) {
                 document.getElementById("zipcode").value = data.zonecode;
