@@ -1,0 +1,14 @@
+*{margin: 0; padding: 0; letter-spacing: -0.1; }
+#container{width: 1310px; height: 1220px; background-color: #f6f6f6;
+margin: 100px auto; padding: 60px 0;}
+.info{width: 1240px; height: 1140px; margin:0 auto;
+display: flex; justify-content: space-between;}
+.none-mark{width: 532px; height: 1138px; margin-right: 50px; box-sizing: border-box;}
+.maginT20{width: 680px; height: 1138px; box-sizing: border-box;}
+dt{color: #333; font-size: 20px; font-weight: 600; margin-bottom: 10px;}
+dd{color: #666; font-size: 18px; margin-bottom: 5px;}
+dl{margin-bottom: 30px;}
+dl strong{color: #666; font-size: 18px; display: inline-block; margin-bottom: 5px;}
+.use01{color: rgb(184,49,47); margin-left: 30px; margin-bottom: 15px;}
+.use01 span{color: #666;}
+.use02{ margin-left: 60px;}
