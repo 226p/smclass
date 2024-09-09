@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+    *{margin: 0; padding: 0;
+      font-family: "Noto Sans KR", sans-serif; font-optical-sizing: auto; font-weight: 400; font-style: normal;}
+    a{text-decoration: none; color: inherit;}
+    ul, li{list-style-type: none;}
+    .top_menu{width: 100%; height: 35px; background-color: #101010;}
+    .top_menu ul{width: 500px; display: flex; color: white; font-size: 13px; float: right; margin-top: 6px;}
+    .top_menu li{width: 110px; height: 17px; text-align: center;}
+    #top_menu1{width: 75px;}
+    #top_menu2{width: 40px;}
+    #top_menu3{width: 100px;}
+    #top_menu4{width: 75px;}
+    #top_menu5{width: 110px;}
+    nav{width: 100%; height: 82px; border-bottom: 1px solid black; display: flex;}
+    .logo{width: 150px; height: 82px;}
+    .logo h2{width: 100px; height: 30px; background: url(images/ico_set.png) -320px -385px no-repeat; background-size: 800px 800px; margin-top: 25px; margin-left: 40px;}
+    .menu{width: 85%; height: 82px;}
+    .menu ul{width: 650px; height: 82px; display: flex; margin: 0 auto; text-align: center; padding-top: 20px; }
+    .menu a{ font-size: 22px; font-weight: 700; color:#101010;}
+    #menu_01{width: 180px;}
+    #menu_02{width: 180px;}
+    #menu_03{width: 110px;}
+    #menu_04{width: 130px;}
+    #menu_05{width: 140px;}
+    .quick_menu{width: 200px; height: 82px; padding-left: 20px; box-sizing: border-box; }
+    .quick_menu ul{display: flex; width:130px; height:52px; margin-top:15px; margin-left: 50px;}
+    .quick_menu li{width: 62px; height: 52px; font-size: 12px; font-weight: 700; color: #101010;}
+    .quick_menu #quick_01{width: 32px; height: 32px; display: inline-block; background: url(images/ico_set.png) -584px -320px no-repeat; background-size: 800px 800px;}
+    .quick_menu #quick_02{width: 32px; height: 32px; display: inline-block; background: url(images/ico_set.png) -628px -320px no-repeat; background-size: 800px 800px;}
+    .quick_menu div{width: 50px; height: 20px; font-size: 12px; position: relative; left: -10px; top: 30px; margin-left: 10px;}
+    section #banner{width: 100%; height: 640px; background: url(images/co01.jpg); background-size: cover; box-sizing: border-box; padding: 70px 0 0 480px;}
+    section .banner_title{width: 600px; height: 450px; color: white;}
+    .banner_title h4{width: 70px; height: 30px; color: #101010; background-color: white; text-align: center; font-size: 16px; font-weight: 700; margin-bottom: 26px;}
+    .banner_title h5{width: 220px; height: 42px; font-size: 28px; font-weight: 600; border-bottom: 1px solid white; margin-bottom: 5px;}
+    .banner_title h3{width: 450px; height: 128px; font-size: 52px; margin-bottom: 25px;}
+    .banner_title h2{width: 230px; height: 56px; font-size: 40px; margin-top: 20px; font-weight: 600;}
+    .banner_title h2 span{display: inline-block; width: 48px; height: 48px; background: url(images/img_main_ico.png) -610px -74px no-repeat; background-size: 800px 800px; position: relative; top: 8px;}
+    section .banner_title .title_span1, .title_span2{width: 100px; height: 30px; font-size: 18px; display: inline-block;}
+    section .banner_title .title_span1{width: 90px;}
+    section .banner_title .title_span2{width: 110px;}
+    .banner_title div{width: 130px; height: 28px; font-size: 20px; margin-top: 30px;}
+    .banner_title div span{width: 23px; height: 27px; font-size: 18px; font-weight: 600; margin: 0 12px; position: relative; top: -5px;}
+    .banner_title .title_a1{display: inline-block; width: 24px; height: 24px; background: url(images/ico_set.png) -540px -24px; background-size: 800px 800px;}
+    .banner_title .title_a2{display: inline-block; width: 24px; height: 24px; background: url(images/ico_set.png) -564px -24px; background-size: 800px 800px;}
+
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top_menu">
+      <ul>
+        <li id="top_menu1">회원가입</li>
+        <li id="top_menu2">로그인</li>
+        <li id="top_menu3">고객행복센터</li>
+        <li id="top_menu4">배송정보검색</li>
+        <li id="top_menu5">기프트카드 등록</li>
+      </ul>
+    </div>
+    <nav>
+      <div class="logo">
+        <h2></h2>
+      </div>
+      <div class="menu">
+        <ul>
+          <li id="menu_01"><a href="#">COOKIT소개</a></li>
+          <li id="menu_02"><a href="#">COOKIT메뉴</a></li>
+          <li id="menu_03"><a href="#">리뷰</a></li>
+          <li id="menu_04"><a href="#">이벤트</a></li>
+          <li id="menu_05"><a href="#">MY쿡킷</a></li>
+        </ul>
+      </div>
+      <div class="quick_menu">
+        <ul>
+          <li>
+            <a href="#" id="quick_01">
+              <div>장바구니</div>
+          </a>
+          </li>
+          <li>
+            <a href="#" id="quick_02">
+              <div>메뉴찾기</div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <section>
+    <div id="banner">
+      <div class="banner_title">
+        <a href="">
+          <h4>NEW</h4>
+          <h5>3/16 신메뉴 출시</h5>
+          <h3>따끈한 소울푸드<br>황태콩나물 해장국</h3>
+          <span class="title_span1">
+            <span><i class="fa-regular fa-user"></i> 3인분</span>
+          </span>
+          <span class="title_span2">
+            <span><i class="fa-regular fa-clock"></i> 조리 15분</span>
+          </span>
+          <h2>16,800원 <span></span>
+          </h2>
+          <div>
+            <a href="#" class="title_a1"></a>
+            <span> 1/5 </span>
+            <a href="#" class="title_a2"></a>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

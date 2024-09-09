@@ -1,102 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <title>하나투어</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
-    *{margin: 0; padding: 0;
-      font-family: "Noto Sans KR", sans-serif;
-      font-optical-sizing: auto;
-      font-weight: 400;
-      font-style: normal;
-      letter-spacing: -0.4px;
-    }
-    a{text-decoration: none; color: inherit;}
-    section{width: 100%; height: 749px; margin-top: 100px;
-    background: url(images/ha1.jpg) no-repeat; padding: 75px 0 65px;
-    box-sizing: border-box;}
-    #m_wrap{width: 1200px; height: 600px; margin:0 auto;}
-    #txt_wrap{font-size: 30px; font-weight: 500; color: #fff;
-    margin-bottom: 35px;}
-    #wrap{width: 1200px; height: 517px; display: flex;
-    background-color: white;}
-    #wrap .inrLeft{width: 447px; height: 519px;;
-    box-sizing: border-box;  padding-top: 50px;}
-    #wrap div{width: 387px; height: 218px; margin: 0 auto;}
-    #wrap .img{width: 387px; height: 218px; margin: 0 auto; font-size: 50px; text-align: center; line-height: 200px; color: white;
-      background: url(images/inr1.jpg) no-repeat 0 -37px; background-size: cover;}
-    #wrap .txt{margin-top: 30px;}
-    #wrap .inrLeft .txt h3{font-size: 20px; font-weight: 600; color: #111;
-    margin-bottom: 10px;}
-    #wrap .inrLeft .txt h4{font-size: 12px; color: #333;}
-    #wrap .inrLeft .txt p{font-size: 15px; line-height: 22px; color: #666; margin-bottom: 20px;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하나투어 : 꿈꾸는 대로, 펼쳐지다</title>
+    <style>
+         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+        *{margin: 0; padding: 0;
+            font-family: "Noto Sans KR", sans-serif;
+         font-optical-sizing: auto;
+         font-weight: 400;
+         font-style: normal;
+         letter-spacing: -0.4px;
+        }
+        .main{width: 100%; height: 749px; background-image: url(images/ha1.jpg); background-size: cover;
+         margin-top: 100px; padding: 75px 0 60px;}
+        #wrap{width: 1200px; height: 600px; margin: 0 auto;}
+        #wrap .mainTxt{font-size: 30px; color: #fff; font-weight: 500; margin-bottom: 30px;}
+        #wrap .cont{width: 1200px; height: 517px; 
+            display: flex; background-color: white; border: 1px solid black;}
+        #wrap .cont #left{width: 447px; height: 517px; box-sizing: border-box; border: 1px solid black;}
+        #wrap .cont #left .link{width: 447px; height: 220px; text-align: center;
+         padding-top: 50px; padding-bottom: 30px;}
+        #wrap .cont #left .txt{width: 447px; height: 290; padding-left: 25px;  letter-spacing: -3;}
+        #wrap .cont #left h2{font-size: 20px; font-weight: 600; color: #111; padding-bottom: 10px;}
+        #wrap .cont #left p{font-size: 15px; color: #666; padding-bottom: 20px; line-height: 22px;}
+        #wrap .cont #left h3{font-size: 13px; color: #333; padding-bottom: 10px;}
 
-    #wrap .inrCenter{width: 447px; height: 517px; box-sizing: border-box; padding-top: 270px;
-      background-image: url(images/ha02.jpg);}
-    #wrap .inrCenter .txt h3{font-size: 20px; font-weight: 600; color: white;
-    margin-bottom: 10px;}
-    #wrap .inrCenter .txt h4{font-size: 12px; color: white;}
-    #wrap .inrCenter .txt p{font-size: 15px; line-height: 22px; color: white; margin-bottom: 20px;}
+        #wrap .cont #center{width: 447px; height: 517px; border: 1px solid black; box-shadow: #111;
+        background: url(images/ha02.jpg);  padding-left: 25px; box-sizing: border-box;}
+        #wrap .cont #center h2{font-size: 20px; font-weight: 600; color: white; padding-bottom: 10px; padding-top: 300px;}
+        #wrap .cont #center p{font-size: 15px; color: white; padding-bottom: 20px; line-height: 22px;}
+        #wrap .cont #center h3{font-size: 13px; color: white; padding-bottom: 10px;}
 
-    #wrap .inrRight{width: 306px; height: 519px; padding-left: 30px;
-    box-sizing: border-box;}
-    #wrap .inrRight .txt h3{font-size: 20px; font-weight: 600; color: #111;
-    margin-bottom: 30px;}
-    #wrap .inrRight .txt h4{font-size: 12px; color: #333;}
-    #wrap .inrRight .txt p{font-size: 15px; line-height: 22px; color: #666;}
-  </style>
+        #wrap .cont #right{width: 306px; height: 517px; border: 1px solid black; box-sizing: border-box;}
+    </style>
 </head>
 <body>
-  <section>
-    <div id="m_wrap">
-      <div id="txt_wrap"><i class="fa-solid fa-circle-play"></i> 꿈꾸는 대로, 펼쳐지다</div>
-      <div id="wrap">
-        <div class="inrLeft">
-          <a href="https://www.youtube.com/watch?v=CqJfxmSuvec" target="_blank">
-            <div class="img"><i class="fa-solid fa-circle-play"></i></a> </div>
-          <div class="txt">
-            <h3>우리 함께 다 같이 세~~~~부</h3>
-            <P>
-              👨‍👩‍👦‍👦가족끼리, 👭친구끼리, 👫연인끼리 떠나요<br>
-              일년 내내 따뜻한 날씨🌅 <br>
-              푸른 바다와 바다를 넘나드는🏄 액티비티<br>
-              4시간이면 도착! 부담없는 현지 물가까지💸
-            </P>
-            <h4><a href="https://www.hanatour.com/promotion/plan/PM006683CAAC" target="_blank">매력이 가득한 CEBU 보러가요></a></h4>
-          </div>
+    <section class="main">
+        <div id="wrap">
+            <div class="mainTxt">꿈꾸는 대로, 펼쳐지다</div>
+            <div class="cont">
+                <div id="left">
+                    <div class="link">
+                        <iframe width="385" height="220" src="https://www.youtube.com/embed/CqJfxmSuvec?si=X45olHzBRvbxrLJs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="txt">
+                        <h2>우리 함께 다 같이 세~~~~부</h2>
+                        <p>👨‍👩‍👦‍👦가족끼리, 👭친구끼리, 👫연인끼리 떠나요<br>
+                          일년 내내 따뜻한 날씨🌅 <br>
+                          푸른 바다와 바다를 넘나드는🏄 액티비티<br>
+                          4시간이면 도착! 부담없는 현지 물가까지💸</p>
+                        <h3>다양한 매력이 가득한 CEBU 보러가요></h3>
+                    </div>
+                </div>
+                <div id="center">
+                    <div class="txt"></div>
+                        <h2>휴양지와 도시의 매력을 한 번에!</h2>
+                        <p>막탄 아일랜드에서는,<br>
+                            리조트에서 힐링여행 하기로 해요<br>
+                            세부 시티에서는,<br>
+                            대형 쇼핑몰도 보고 SNS 맛집투어도 꼬옥!</p>
+                        <h3>세부의 바다에서 헤엄칠 결실></h3>
+                    </div>
+                </div>
+                <div id="right">
+                    <div id="img"></div>
+                    <div class="txt">
+                      <h3>인생여행 보홀 Bohol,</h3>
+                      <p>
+                        아름다움을 넘어
+                        경이로움을 만나는 그곳<br>🌊<br>
+                        이토록 뻔한 대자연이 주는 <br>
+                        매일매일의 참신함✨
+                      </P>
+                      <h4>지금 여행을 떠나기 딱 좋은!></h4>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="inrCenter">
-          <div class="txt">
-            <h3>휴양지와 도시의 매력을 한 번에!</h3>
-            <p>
-            막탄 아일랜드에서는,<br>
-            리조트에서 힐링여행 하기로 해요<br>
-            세부 시티에서는,<br>
-            대형 쇼핑몰도 보고 SNS 맛집투어도 꼬옥!
-          <p>
-          <h4>세부의 바다에서 헤엄칠 결실></h4>
-        </div>
-        <div class="txt"></div>
-        </div>
-        <div class="inrRight">
-          <div></div>
-          <div class="txt">
-            <h3>인생여행 보홀 Bohol,</h3>
-            <p>
-              아름다움을 넘어
-              경이로움을 만나는 그곳<br>🌊<br>
-              이토록 뻔한 대자연이 주는 <br>
-              매일매일의 참신함✨
-            </P>
-            <h4>지금 여행을 떠나기 딱 좋은!></h4>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
+    </section>
 </body>
 </html>
