@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{margin: 0; padding: 0;}
+    .main{width: 200px; height: 200px; border: 1px solid black; margin: 50px auto; perspective :200px;}
+    .move{transition: 1s all ease-in;}
+    .move:hover{transform: rotateX(180deg) scale(1.5);
+    }
+    
+      /* transform: rotateY(180deg); transform: rotateZ(180deg); */
+      /* transform-origin: left top;} transform: skewY(-30deg); */
+      /* .move:hover{transform: } */
+      /*{transform: translate(0,200px);}*/
+    .move img{width: 100%; height: auto;}
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="move">
+      <img src="images/t01.png">
+    </div>
+  </div>
+  <hr>
+  <div class="main">
+    <div class="move">
+      <img src="images/t02.jpg">
+    </div>
+  </div>
+</body>
+</html>
