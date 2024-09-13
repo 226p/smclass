@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/board.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/icon.png">
+  <title>포레스트 리솜</title>
+  <script>
+    function m_over(){
+      document.querySelector(".navibg").style.display='block';
+    }
+    function m_leave(){
+      document.querySelector(".navibg").style.display='none';
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">
+        <a href=""><img src="images/logo.png"></a>
+      </div>
+      <div class="nav_wrap">
+        <div class="quick_menu">
+          <ul>
+            <li><a href="">회원예약</a></li>
+            <li><a href="">패키지 예약</a></li>
+            <li><a href="">부대시설 예약</a></li>
+            <li><a href="">회원가입</a></li>
+            <li><a href="">로그인</a></li>
+          </ul>
+        </div>
+        <div class="menu" onmouseover="m_over()" onmouseleave="m_leave()">
+          <ul>
+            <li><a href="">포레스트</a></li>
+            <li><a href="">스파&찜질방</a></li>
+            <li><a href="">객실</a></li>
+            <li><a href="">특별한 경험</a></li>
+            <li><a href="">세미나 & 연회</a></li>
+            <li><a href="">브랜드소개</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+    <!-- 하부 메뉴 -->
+    <div class="navibg"></div>
+    <!-- 서브 배너 -->
+    <div class="sub_banner"></div>
+    <section>
+     <div class="sub_navloc">HOME&nbsp;&nbsp; <i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 로그인</div>
+     <h1></h1>
+     <div class="category">
+       <div id="login">
+         <div class="img"><img src="images/login_bg01.gif"></div>
+         <form action="#" name="frm" method="get">
+           <label></label>
+           <input type="text" name="id" id="id" placeholder="아이디를 입력해주세요"><br>
+           <label></label>
+           <input type="password" name="pw" id="pw" placeholder="비밀번호를 입력해주세요"><br>
+           <input type="checkbox" name="saveid" id="save_id">
+           <label>아이디 저장</label><br>
+           <button type="submit" class="button">로그인</button>
+          </form>
+          <ul>
+            <li><a href="https://book.resom.co.kr/signUp">회원가입&nbsp;&nbsp; | &nbsp;&nbsp;</a></li>
+            <li><a href="https://book.resom.co.kr/findId">아이디 찾기&nbsp;&nbsp; | &nbsp;&nbsp;</a></li>
+            <li><a href="https://book.resom.co.kr/findPwd">비밀번호 찾기</a></li>
+          </ul>
+        </div>
+        <p>1년 이상 로그인 기록이 없을 경우, 개인정보 보호를 위해 휴면상태로 전환됩니다.</p>
+      </div>
+          
+    </section>
+</body>

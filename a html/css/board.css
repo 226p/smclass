@@ -1,0 +1,71 @@
+.sub_banner{width: 100%; height: 320px; background: url(../images/news.jpg) no-repeat;}
+
+
+section{width:1200px; height:1000px; margin:25px auto 0; text-align: center;}
+section .sub_navloc{font-size: 12px; font-weight: 500; color: #777; text-align: right;}
+section h1{text-align: left; font-size:40px; font-weight: 700; margin: 10px 0 30px;}
+section table,th,td{border-collapse: collapse; }
+section th,td{height:42px; }
+section th{border-top:2px solid black; border-bottom:2px solid black;
+font-size: 16px; font-weight: 700; background: #f3f3f3; }
+section td{border-bottom:1px solid silver; }
+section table{width:1200px; margin:0 auto; text-align: center;
+  border-top:2px solid black; border-bottom:2px solid black; 
+}
+section td:nth-child(2){ text-align: left; padding-left:10px; }
+.wrapper{width:380px; height:40px; margin:0 auto 30px;}
+.wrapper select{width:80px; height:40px; border:1px solid #666;
+  background: url(../images/search-box-select.png) no-repeat 90%;
+  appearance: none; padding:5px; box-sizing: border-box;
+}
+.wrapper input {width:200px; height:40px; font-size:16px; 
+  border:1px solid #666; padding-left:10px; box-sizing: border-box; 
+  position: relative; top:2px;
+}
+.wrapper button{width:40px; height:40px; background: #666; color:white;
+border:none; font-size: 16px;
+position: relative; top:2px;
+}
+.page-num{ margin-top:35px;
+  width:100%;
+  font-size: 16px; 
+  display: flex;
+  justify-content: center;
+  
+}
+.page-num li{width:36px; height:35px; border:1px solid #989898;
+margin:0 3px; line-height:32px; box-sizing: border-box;}
+.page-num .first{background: url(../images/paging_first.png) no-repeat; border:none; }
+.page-num .prev{background: url(../images/paging_prev.png) no-repeat; border:none; }
+.page-num .next{background: url(../images/paging_next.png) no-repeat; border:none; }
+.page-num .last{background: url(../images/paging_last.png) no-repeat; border:none; }
+.write a {width:120px; height:50px; float:right; 
+border:2px solid black; line-height: 50px;}
+
+/* 고정 스크롤 */
+
+#right_fixed{width: 115px; height: 297px; border: 1px solid black; position: fixed; right: 0; top: 169px;}
+#right_fixed .chatting{width: 115px; height: 84px; border-bottom: 1px solid black; box-sizing: border-box; background-color: white;}
+#right_fixed .chatting div:nth-child(1){width: 38px; height: 40px; background: url(../images/mol.svg) no-repeat; background-size: cover; margin: 26px auto 0;}
+#right_fixed .chatting div:nth-child(2){width: 100%; text-align: center; font-size: 12px; margin-top: 5px;}
+#right_fixed .ai_chatting{width: 115px; height: 84px; border-bottom: 1px solid black; background-color: white;}
+#right_fixed .ai_chatting div:nth-child(1){width: 38px; height: 40px; background: url(../images/cute.svg) no-repeat; background-size: cover; margin: 26px auto 0;}
+#right_fixed .ai_chatting div:nth-child(2){width: 100%; text-align: center; font-size: 12px; margin-top: 5px;}
+#right_fixed .items{width: 115px; height: 45px; border-bottom: 1px solid #ddd; font-size: 12px; text-align: center; line-height: 45px; background: #f3f3f3; letter-spacing: -1.5px;}
+#right_fixed .items span{width: 12px; height: 8px; content: ''; background: url(../images/spr_com.png) no-repeat; background-position: -80px -68px; display: inline-block;}
+#right_fixed .top{width: 115px; height: 30px; border-bottom: 1px solid black; font-size: 13px; text-align: center; line-height: 30px; background: #f3f3f3;}
+
+
+/* 로그인 */
+.category{width: 100%; height: 430px; margin: 0 auto;}
+.category .img{box-sizing: border-box; width: 200px; height: 82px; object-fit: cover; margin-top: 50px; float: left; margin-left: 54px;}
+.category #login{width: 550px; height: 430px; margin: 0 auto; border: 1px solid rgba(0,0,0,0.2); position: relative;}
+.category #login #id{width: 80%; height: 45px; border: 1px solid rgba(0,0,0,0.2); font-size: 13px; box-sizing: border-box; padding-left: 10px; margin-top: 20px; margin-bottom: 5px;}
+.category #login #pw{width: 80%; height: 45px; border: 1px solid rgba(0,0,0,0.2); font-size: 13px; box-sizing: border-box; padding-left: 10px;}
+.category #login #save_id{font-size: 12px; margin-top: 10px; margin-bottom: 30px;}
+.category #login .button{width: 80%; height: 45px; background: #30261d; font-size: 20px; font-weight: 600; color: #fff;}
+.category #login ul{display: flex; justify-content: center; margin-top: 10px;}
+.category #login li a{font-size: 14px; color: #333; line-height: 1.3; font-weight: 500;}
+.category p{font-size: 12px; color: #666; line-height: 1.3; margin-top: 10px; padding-right: 120px;}
+
+
