@@ -1,7 +1,7 @@
 .sub_banner{width: 100%; height: 320px; background: url(../images/news.jpg) no-repeat;}
 
 
-section{width:1200px; height:1000px; margin:25px auto 0; text-align: center;}
+section{width:1200px; height:550px; margin:25px auto 0; text-align: center;}
 section .sub_navloc{font-size: 12px; font-weight: 500; color: #777; text-align: right;}
 section h1{text-align: left; font-size:40px; font-weight: 700; margin: 10px 0 30px;}
 section table,th,td{border-collapse: collapse; }
@@ -62,10 +62,11 @@ border:2px solid black; line-height: 50px;}
 .category #login{width: 550px; height: 430px; margin: 0 auto; border: 1px solid rgba(0,0,0,0.2); position: relative;}
 .category #login #id{width: 80%; height: 45px; border: 1px solid rgba(0,0,0,0.2); font-size: 13px; box-sizing: border-box; padding-left: 10px; margin-top: 20px; margin-bottom: 5px;}
 .category #login #pw{width: 80%; height: 45px; border: 1px solid rgba(0,0,0,0.2); font-size: 13px; box-sizing: border-box; padding-left: 10px;}
-.category #login #save_id{font-size: 12px; margin-top: 10px; margin-bottom: 30px;}
+.category #login input[type="checkbox"]{width: 14px; height: 14px; margin-top: 10px; margin-bottom: 20px; position: relative; left: -170px;}
+.category #login input[type="checkbox"]+label{font-size: 14px; position: relative; left: -170px; top: -2px; padding-left: 3px;}
 .category #login .button{width: 80%; height: 45px; background: #30261d; font-size: 20px; font-weight: 600; color: #fff;}
 .category #login ul{display: flex; justify-content: center; margin-top: 10px;}
 .category #login li a{font-size: 14px; color: #333; line-height: 1.3; font-weight: 500;}
-.category p{font-size: 12px; color: #666; line-height: 1.3; margin-top: 10px; padding-right: 120px;}
+.category p{font-size: 12px; color: #666; line-height: 1.3; margin-top: 10px; padding-right: 120px; word-spacing: -1.5px;}
 
 

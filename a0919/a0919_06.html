@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{margin: 0; padding: 0; letter-spacing: -0.09em;}
+    header{width: 650px; height: 54px; background-color: #0aaf6b;}
+    header .pop_header{width: 650px; height: 54px; padding: 15px 20px 15px 40px; box-sizing: border-box; background: url(images/bullet-h1.png) 20px 50% no-repeat;}
+    header h1{font-size: 18px; font-weight: 600; color: #fff; background: url(images/btn-close.png) 100% no-repeat;}
+
+    ol, ul{text-decoration: none; color: inherit; list-style-type: none;}
+    section{width: 650px; height: 828px;}
+    #intro{width: 600px; height: 122px; background: #f8f8f8; margin: 25px auto; padding-top: 25px; padding-left: 25px; box-sizing: border-box;}
+    #intro p{font-size: 14px; color: #454545; line-height: 24px; letter-spacing: -1.2px; text-align: justify;}
+    #main{width: 600px; height: 238px; border: 1px solid #e8e8e8; margin: 0 auto;}
+
+    #bmiCheckfrm{width: 558px; height: 27px; position: relative; margin: 25px auto 10px; }
+    input{width: 60px; height: 27px; border: 1px solid #e8e8e8; text-align: center; outline:none;}
+    label{font-size: 15px; font-weight: 700; color: #454545; margin-right: 10px;}
+    #btnCalc{width: 70px; height: 30px; background: #0aaf6b; color: #fff; font-weight: 600; position: absolute; right: 75px; text-align: center; cursor: pointer;}
+    #reset{width: 70px; height: 30px; background: #656565; color: #fff; font-weight: 600; text-align: center; position: absolute; right: 0; cursor: pointer;}
+
+    #frm{width: 600px; height: 238px; display: flex; padding-left:25px; padding-top: 10px; box-sizing: border-box;}
+    dt{float:left; width:20%; height: 24px; font-size: 14px; color: #454545; display: inline-block;}
+    dd{width: 446px; height: 24px; font-size: 14px; font-weight: 700; color: #eb4f3a;}
+
+    .dash{width: 558px; height: 35px; margin-top: 20px;}
+    .dash label{font-weight: 600; font-size: 14px;}
+    .bmi label{width: 117px; height: 24px; display: inline-block;}
+    .bmi .dv1{width: 103px; height: 24px; display: inline-block;}
+    .bmi .dv2{width: 81px; height: 24px; display: inline-block;}
+  
+    
+    .clearfix{display: flex;}
+    .clearfix li{width: 558px; height: 35px; font-size: 13px; font-weight: 700; box-sizing: border-box; display: flex; color: #fff; line-height: 38px;}
+    .clearfix li:nth-child(1){width: 25%; background: #329ae3; padding-left: 10%;}
+    .clearfix li:nth-child(2){width: 20%; background: #95c520; padding-left: 7.5%;}
+    .clearfix li:nth-child(3){width: 18%; background: #ee942a; padding-left: 5.5%;}
+    .clearfix li:nth-child(4){width: 36.9%; background: #f15232; padding-left: 16%;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="pop_header">
+      <h1>나의 체질량지수(BMI)</h1>
+      <a href="#" id="btnClose" title="닫기"></a>
+    </div>
+  </header>
+  <section>
+    <div id="intro">
+      <p>체질량지수는 자신의 몸무게(kg)를 키의 제곱(m)으로 나눈 값입니다.<br>
+        체질량지수는 근육량, 유전적 원인, 다른 개인적 차이를 반영하지 못하는 단점이 있음에도 불구하고<br>
+        조사자들이나 의료인들이 가장 많이 쓰는 방법 중 하나입니다.<br></p>
+      </div>
+    <div id="main">
+      <form action="" name="bmiCheckfrm" method="get" id="bmiCheckfrm">
+        <label>신장</label>
+        <input type="text" name="tall" id="tall"> cm&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp; 
+        <label>체중</label>
+        <input type="text" name="weight" id="weight"><span> kg</span>
+        <input type="button" name="btnCalc" id="btnCalc" value="계산">
+        <input type="reset" name="reset" id="reset">
+      </form>
+      <form action="" name="frm" method="get" id="frm">
+      <dl>
+        <dt>비만도 결과</dt>
+        <dd>정상 입니다.</dd>
+        <dt>BMI 지수</dt>
+        <dd>21.60</dd>
+      <ul class="dash">
+        <li class="bmi">
+          <label>BMI</label>
+          <label class="dv1">18.5</label>
+          <label class="dv2">23</label>
+          <label>25.00</label>
+        </li>
+        <ul class="clearfix">
+          <li>저체중</li>
+          <li>정상</li>
+          <li>과체중</li>
+          <li>비만</li>
+        </ul>
+        <label>체중</label>
+      </ul>
+      </form>
+    </dl>
+    </div>
+  </section>
+  
+</body>
+</html>
