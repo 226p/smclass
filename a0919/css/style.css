@@ -1,0 +1,51 @@
+*{margin: 0; padding: 0; letter-spacing: -0.09em;}
+/* 헤더 */
+header{width: 650px; height: 54px; background-color: #0aaf6b; border-bottom: 3px solid #e5e5e5; box-sizing: border-box;}
+header .pop_header{width: 650px; height: 54px; padding: 15px 20px 15px 40px; box-sizing: border-box; background: url(../images/bullet-h1.png) 20px 50% no-repeat;}
+header h1{font-size: 18px; font-weight: 600; color: #fff; background: url(../images/btn-close.png) 100% no-repeat;}
+
+/* 소개 */
+ol, ul{text-decoration: none; color: inherit; list-style-type: none;}
+section{width: 650px; height: 828px;}
+#intro{width: 600px; height: 122px; background: #f8f8f8; margin: 20px auto 10px; padding-top: 25px; padding-left: 25px; box-sizing: border-box;}
+#intro p{font-size: 14px; color: #454545; line-height: 24px; letter-spacing: -1.2px; text-align: justify;}
+
+/* 메인 */
+#main{width: 600px; height: 238px; border: 1px solid #e8e8e8; margin: 0 auto;}
+
+#bmiCheckfrm{width: 558px; height: 27px; position: relative; margin: 20px auto 10px; }
+input{width: 60px; height: 27px; border: 1px solid #e8e8e8; text-align: center; outline:none;}
+label{font-size: 15px; font-weight: 700; color: #454545; margin-right: 10px;}
+#btnCalc{width: 70px; height: 30px; background: #0aaf6b; color: #fff; font-weight: 600; position: absolute; right: 75px; text-align: center; cursor: pointer;}
+#reset{width: 70px; height: 30px; background: #656565; color: #fff; font-weight: 600; text-align: center; position: absolute; right: 0; cursor: pointer;}
+
+/* 비만도 결과 및 bmi 지수*/
+#frm{width: 600px; height: 200px; display: flex; padding-left:25px; padding-top: 10px; box-sizing: border-box;}
+.ddl{width: 558px; height: 238px; box-sizing: border-box;}
+dt{width:20%; height: 24px; font-size: 14px; color: #454545; display: inline-block; float: left;}
+dd{width: 446px; height: 24px; font-size: 14px; font-weight: 700; color: #eb4f3a;}
+
+/* 그래프 글씨 */
+.dash{width: 558px; height: 35px; margin-top: 10px;}
+.dash label{font-weight: 600; font-size: 13px;}
+.dash .bmi label{font-weight: 600; font-size: 14px;}
+.bmi label{width: 117px; height: 24px; display: inline-block;}
+.bmi .dv1{width: 103px; height: 24px; display: inline-block;}
+.bmi .dv2{width: 81px; height: 24px; display: inline-block;}
+
+/* bmi 그래프 */
+.clearfix{display: flex;}
+.clearfix li{width: 558px; height: 35px; font-size: 13px; font-weight: 700; box-sizing: border-box; display: flex; color: #fff; line-height: 38px;}
+.clearfix li:nth-child(1){width: 25%; background: #329ae3; padding-left: 10%;}
+.clearfix li:nth-child(2){width: 20%; background: #95c520; padding-left: 7.5%;}
+.clearfix li:nth-child(3){width: 18%; background: #ee942a; padding-left: 5.5%;}
+.clearfix li:nth-child(4){width: 36.9%; background: #f15232; padding-left: 16%;}
+
+/* 하단 올바른 식생활 지침*/
+footer{width: 650px; height: 450px; margin-top: 5px;} 
+footer h2{width: 610px; height: 24px; font-size: 18px; color: #222; padding-left: 23px; font-weight: 600; margin-bottom: 15px; box-sizing: border-box; background: url(../images/bullet-h3g.png) 0 50% no-repeat;}
+footer h4{width: 610px; height: 24px; color: #0aaf6b; font-size: 14px; font-weight: 700; margin-bottom: 5px;}
+footer p{width: 610px; height: 18px; color: #454545; font-size: 14px; line-height: 18px; margin-bottom: 15px;}
+footer p:nth-child(7){width: 610px; height: 36px;}
+footer p:nth-child(9){width: 610px; height: 36px;}
+footer p:nth-child(11){width: 610px; height: 36px;}

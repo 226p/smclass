@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배열객체</title>
+</head>
+<body>
+  <script>
+    
+    var arr = new Array(2);
+    var name = prompt("이름을 입력하세요.");
+    var kor = Number(prompt("국어 점수를 입력하세요."));
+    var eng = Number(prompt("영어 점수를 입력하세요."));
+    var math = Number(prompt("수학 점수를 입력하세요."));
+    var total = kor+eng+math;
+    var avg = total/3;
+    document.write("이름 : "+name+"<br>");
+    document.write("국어 : "+kor+"<br>");
+    document.write("영어 : "+eng+"<br>");
+    document.write("수학 : "+math+"<br>");
+    document.write("합계 : "+total+"<br>");
+    document.write("평균 : "+avg.toFixed(2)+"<br>");
+
+
+    // var num1 = Number(prompt("숫자를 입력하시오."));
+    // var num2 = Number(prompt("숫자를 입력하시오."));
+    // var num3 = Number(prompt("숫자를 입력하시오."));
+    // var num4 = Number(prompt("숫자를 입력하시오."));
+    // var num5 = Number(prompt("숫자를 입력하시오."));
+    // document.write(num1+"<br>");
+    // document.write(num2+"<br>");
+    // document.write(num3+"<br>");
+    // document.write(num4+"<br>");
+    // document.write(num5+"<br>");
+
+    // var arr = new Array(5);
+    // for(var i=0;i<5;i++){
+    //   arr[i] = Number(prompt("숫자를 입력하시오."));
+    //   document.write(arr[i]+"<br>");
+    // }
+
+
+
+    // var arr = new Array(3); //arr변수 3개의 변수공간 생성
+    // arr[0] = 100;
+    // arr[1] = 99;
+    // arr[2] = 98;
+    // document.write(arr[0]);
+  </script>
+</body>
+</html>

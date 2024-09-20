@@ -3,43 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <style>
-    *{margin: 0; padding: 0; letter-spacing: -0.09em;}
-    header{width: 650px; height: 54px; background-color: #0aaf6b;}
-    header .pop_header{width: 650px; height: 54px; padding: 15px 20px 15px 40px; box-sizing: border-box; background: url(images/bullet-h1.png) 20px 50% no-repeat;}
-    header h1{font-size: 18px; font-weight: 600; color: #fff; background: url(images/btn-close.png) 100% no-repeat;}
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <title>나의 체질량지수(BMI)</title>
+  <script>
+    function calBtn(){
+      //alert("계산 버튼 클릭");
+      var length = document.getElementById("tall").value;
+      var weight = document.getElementById("weight").value;
+      var length2 = length / 100;
 
-    ol, ul{text-decoration: none; color: inherit; list-style-type: none;}
-    section{width: 650px; height: 828px;}
-    #intro{width: 600px; height: 122px; background: #f8f8f8; margin: 25px auto; padding-top: 25px; padding-left: 25px; box-sizing: border-box;}
-    #intro p{font-size: 14px; color: #454545; line-height: 24px; letter-spacing: -1.2px; text-align: justify;}
-    #main{width: 600px; height: 238px; border: 1px solid #e8e8e8; margin: 0 auto;}
+      var bmi = weight / (length2*length2);
+      var bmi2 = bmi.toFixed(2);
+      //alert(bmi2);
+      document.getElementById("bmiNumber").innerText = bmi2;
 
-    #bmiCheckfrm{width: 558px; height: 27px; position: relative; margin: 25px auto 10px; }
-    input{width: 60px; height: 27px; border: 1px solid #e8e8e8; text-align: center; outline:none;}
-    label{font-size: 15px; font-weight: 700; color: #454545; margin-right: 10px;}
-    #btnCalc{width: 70px; height: 30px; background: #0aaf6b; color: #fff; font-weight: 600; position: absolute; right: 75px; text-align: center; cursor: pointer;}
-    #reset{width: 70px; height: 30px; background: #656565; color: #fff; font-weight: 600; text-align: center; position: absolute; right: 0; cursor: pointer;}
+      var resultText = "";
+      if(bmi2 >= 25){
+        resultText = "비만 입니다."
+      }else if(bmi2 >= 23){resultText = "과체중 입니다."}else if(bmi2 >= 18.5){resultText = " 정상 입니다."}
+      else{resultText = "저체중 입니다."}
 
-    #frm{width: 600px; height: 238px; display: flex; padding-left:25px; padding-top: 10px; box-sizing: border-box;}
-    dt{float:left; width:20%; height: 24px; font-size: 14px; color: #454545; display: inline-block;}
-    dd{width: 446px; height: 24px; font-size: 14px; font-weight: 700; color: #eb4f3a;}
-
-    .dash{width: 558px; height: 35px; margin-top: 20px;}
-    .dash label{font-weight: 600; font-size: 14px;}
-    .bmi label{width: 117px; height: 24px; display: inline-block;}
-    .bmi .dv1{width: 103px; height: 24px; display: inline-block;}
-    .bmi .dv2{width: 81px; height: 24px; display: inline-block;}
-  
-    
-    .clearfix{display: flex;}
-    .clearfix li{width: 558px; height: 35px; font-size: 13px; font-weight: 700; box-sizing: border-box; display: flex; color: #fff; line-height: 38px;}
-    .clearfix li:nth-child(1){width: 25%; background: #329ae3; padding-left: 10%;}
-    .clearfix li:nth-child(2){width: 20%; background: #95c520; padding-left: 7.5%;}
-    .clearfix li:nth-child(3){width: 18%; background: #ee942a; padding-left: 5.5%;}
-    .clearfix li:nth-child(4){width: 36.9%; background: #f15232; padding-left: 16%;}
-  </style>
+      document.getElementById("result").innerText = resultText;
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -60,34 +46,51 @@
         <input type="text" name="tall" id="tall"> cm&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp; 
         <label>체중</label>
         <input type="text" name="weight" id="weight"><span> kg</span>
-        <input type="button" name="btnCalc" id="btnCalc" value="계산">
+        <input type="button" name="btnCalc" id="btnCalc" value="계산" onclick="calBtn()" >
         <input type="reset" name="reset" id="reset">
       </form>
       <form action="" name="frm" method="get" id="frm">
-      <dl>
+      <dl class="ddl">
         <dt>비만도 결과</dt>
-        <dd>정상 입니다.</dd>
+        <dd id="result"></dd>
         <dt>BMI 지수</dt>
-        <dd>21.60</dd>
-      <ul class="dash">
-        <li class="bmi">
-          <label>BMI</label>
-          <label class="dv1">18.5</label>
-          <label class="dv2">23</label>
-          <label>25.00</label>
-        </li>
-        <ul class="clearfix">
-          <li>저체중</li>
-          <li>정상</li>
-          <li>과체중</li>
-          <li>비만</li>
+        <dd id="bmiNumber"></dd>
+        <ul class="dash">
+          <li class="bmi">
+            <label>BMI</label>
+            <label class="dv1">18.5</label>
+            <label class="dv2">23</label>
+            <label>25.00</label>
+         </li>
+         <ul class="clearfix">
+            <li>저체중</li>
+           <li>정상</li>
+           <li>과체중</li>
+           <li>비만</li>
+         </ul>
+           <label>체중</label>
         </ul>
-        <label>체중</label>
-      </ul>
       </form>
     </dl>
+    <footer>
+      <h2>올바른 식생활 지침</h2>
+      <h4>제때에</h4>
+      <p>신체리듬에 맞춰 규칙적으로 식사하는 것은 아주 중요합니다. 특히 아침을 거르지 맙시다.</p>
+      <h4>골고루</h4>
+      <p>다양한 식품을 선택해 부족한 영양소가 없도록 해야 합니다.</p>
+      <h4>알맞게</h4>
+      <p>표준 체중을 유지하기 위해 하루에 필요한 적정열량을 섭취하는 것은 비만과 성인병을 예방하는 기본 노력입<br>니다.</p>
+      <h4>싱겁게</h4>
+      <p>소금의 과잉 섭취는 고혈압을 비롯한 순환기계질환의 중요 요인이 됩니다. 건강을 위해 소금 섭취를 하루에 <br>5g이하로 줄입시다.</p>
+      <h4>즐겁게</h4>
+      <p>식사는 가능한 여럿이 함께 하는 것이 좋습니다. 가족끼리 즐겁게 하는 식사는 그 자체가 즐거움이고, 성인병 관리입니다.</p>
+    </footer>
     </div>
   </section>
+
+
+
+
   
 </body>
 </html>
