@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // var num1 = Number(prompt("숫자를 입력하세요."));
+    // var num2 = Number(prompt("숫자를 입력하세요."));
+    // var num3 = Number(prompt("숫자를 입력하세요."));
+
+    //   //document.write((num1>num2)?(num1>num3)?num1:num3:(num2>num3)?num2:num3);
+
+    // var n_max = Math.max(num1,num2,num3);
+    // var n_min = Math.min(num1,num2,num3);
+
+    // document.write(n_max+"<br>");
+    // document.write(n_min+"<br>");
+
+    var pi = 3.1652;
+    document.write(Math.ceil(pi)+"<br>"); //올림 4
+    document.write(Math.floor(pi)+"<br>");  //버림 3
+    document.write(Math.round(pi)+"<br>"); //소수점 첫째자리 반올림
+
+    Math.round(pi * 100) / 100 //소수점 셋째자리에서 반올림 하는 법
+
+    var num = 50.2652;
+    var num_round = (Math.round(num)*10)/10
+    document.write(num_round+"<br>");
+  </script>
+</body>
+</html>

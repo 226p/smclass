@@ -44,11 +44,11 @@ border:2px solid black; line-height: 50px;}
 
 /* 고정 스크롤 */
 
-#right_fixed{width: 115px; height: 297px; border: 1px solid black; position: fixed; right: 0; top: 169px;}
-#right_fixed .chatting{width: 115px; height: 84px; border-bottom: 1px solid black; box-sizing: border-box; background-color: white;}
+#right_fixed{width: 115px; height: 297px; border: 1px solid black; position: fixed; right: 0; top: 169px; background-color: white;}
+#right_fixed .chatting{width: 115px; height: 84px; border-bottom: 1px solid black; box-sizing: border-box;}
 #right_fixed .chatting div:nth-child(1){width: 38px; height: 40px; background: url(../images/mol.svg) no-repeat; background-size: cover; margin: 26px auto 0;}
 #right_fixed .chatting div:nth-child(2){width: 100%; text-align: center; font-size: 12px; margin-top: 5px;}
-#right_fixed .ai_chatting{width: 115px; height: 84px; border-bottom: 1px solid black; background-color: white;}
+#right_fixed .ai_chatting{width: 115px; height: 84px; border-bottom: 1px solid black;}
 #right_fixed .ai_chatting div:nth-child(1){width: 38px; height: 40px; background: url(../images/cute.svg) no-repeat; background-size: cover; margin: 26px auto 0;}
 #right_fixed .ai_chatting div:nth-child(2){width: 100%; text-align: center; font-size: 12px; margin-top: 5px;}
 #right_fixed .items{width: 115px; height: 45px; border-bottom: 1px solid #ddd; font-size: 12px; text-align: center; line-height: 45px; background: #f3f3f3; letter-spacing: -1.5px;}

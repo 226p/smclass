@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scroll</title>
+  <style>
+    *{margin: 0; padding: 0;}
+    #wrap{width: 2000px; height: 3000px; border: 1px solid black;}
+    #d_wrap{position: fixed;}
+    #txt{width: 200px; height: 100px; border: 1px solid black; background: yellow; text-align: center; font-size: 30px;}
+    #img{width: 2000px; height: 3000px; background: url(images/ev01.jpg);}
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="d_wrap">
+      <div id="txt">000</div>
+    <button type="button" id="fivBtn" onclick="fivBtn()">500 하단 이동</button>
+    <button type="button" onclick="thoBtn()">1000 이동</button>
+    <button type="button" onclick="twoBtn()">2000 이동</button>
+    </div>
+    <div id="img"></div>
+    <script>
+      // document.getElementById("fivBtn").addEventListener("click",function(){
+      //   alert("버튼 클릭");
+      // });
+
+      window.addEventListener('scroll',function(){
+        window.scrollY;
+        window.scrollX;
+        console.log(window.scrollY);
+        console.log(window.scrollX);
+        
+        document.getElementById("txt").innerText = window.scrollY;
+        if(window.scrollY>1300){
+          document.getElementById("img").style.backgroundImage = "url('images/ev02.jpg')";
+        }else if(window.scrollY>500){
+          document.getElementById("img").style.backgroundImage = "url('images/a03.jpg')";
+        }else{document.getElementById("img").style.backgroundImage = "url('images/ev01.jpg')";}
+        
+        // else if(window.scrollY>1000){
+        //   document.getElementById("img").style.backgroundImage = "url('images/a03.jpg')";
+        // }else{
+        //   document.getElementById("img").style.backgroundImage = "url('images/ev02.jpg')";
+        // }
+      });
+      function fivBtn(){
+        window.scrollTo({top:500,behavior:"smooth"});
+      }
+      function thoBtn(){
+        window.scrollTo({top:1000,behavior:"smooth"});
+      }
+      function twoBtn(){
+        window.scrollTo({top:2000,behavior:"smooth"});
+      }
+    </script>
+  </div>
+</body>
+</html>

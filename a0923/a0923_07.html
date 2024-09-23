@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문자객체</title>
+</head>
+<body>
+  <script>
+    var txt = "안녕하세요. 반갑습니다. 다음에 뵈어요. 다음에 안녕";
+    document.write("문자전체 : "+txt+"<br>");
+    document.write("문자길이 : "+txt.length+"<br>");
+    document.write("문자 1개 가져오기 : "+txt.charAt(1)+"<br>");
+    document.write("문자 1개 가져오기 : "+txt.charAt(7)+"<br>");
+
+    document.write("문자 여러개 가져오기 : "+txt.substr(7,6)+"<br>");  //시작위치에서 개수만큼 가져오기
+    document.write("문자 여러개 가져오기 : "+txt.substring(7,12)+"<br>");  //시작위치점에서 끝위치점(한칸 앞) 가져오기
+
+    document.write("문자 전체 가져오기 : "+txt.substring(0,txt.length)+"<br>");  //시작위치점에서 끝위치점(한칸 앞) 가져오기
+    
+    document.write("문자존재 확인 : "+txt.indexOf("다음")+"<br>");  //찾는 문자를 확인해줌(-1은 없다는 뜻)
+    document.write("문자존재 확인 : "+txt.match("내일")+"<br>");  //있으면 값 리턴, 없으면 null
+    
+    document.write("문자 변경 : "+txt.search("에")+"<br>");  //있으면 값 리턴, 없으면 null(indexOf랑 비슷)
+    
+    document.write("문자 변경 : "+txt.replace("요","yo")+"<br>");  //문자변경
+    document.write("문자 변경 : "+txt.replace(/다/g,"da")+"<br>");  //문자변경
+    
+    document.write("배열 : "+txt.split(" ")+"<br>");  //
+    var arr = txt.split(" ");
+    document.write("배열[1] : "+arr[4]+"<br>");  //
+
+  </script>
+  
+</body>
+</html>

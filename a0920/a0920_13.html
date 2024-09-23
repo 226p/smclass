@@ -8,13 +8,17 @@
 <body>
   <script>
     
-    var arr = new Array(2);
-    var name = prompt("이름을 입력하세요.");
-    var kor = Number(prompt("국어 점수를 입력하세요."));
-    var eng = Number(prompt("영어 점수를 입력하세요."));
-    var math = Number(prompt("수학 점수를 입력하세요."));
-    var total = kor+eng+math;
-    var avg = total/3;
+    var arr = new Array(5);
+      arr[0] =prompt("이름을 입력하세요");
+      arr[1] =Number(prompt("국어 점수를 입력하세요"));
+      arr[2] =Number(prompt("영어 점수를 입력하새요"));
+      arr[3] =Number(prompt("수학 점수를 입력하새요"));
+      arr[4] = (arr[1]+arr[2]+arr[3])/3;
+      for(i=0;i<5;i++){
+            document.write(arr[i]+"<br>");
+        }
+
+
     document.write("이름 : "+name+"<br>");
     document.write("국어 : "+kor+"<br>");
     document.write("영어 : "+eng+"<br>");
