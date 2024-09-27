@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <title>Document</title>
+  <script>
+    $(function(){
+       //정규표현식
+      let id_pattern= /^[a-zA-Z]{3,}$/;  //정규표현식은 // 사이에 시작함 
+                                     //  [] 체크 타입데이터 입력 a-zA-Z
+                                     //  {} 자리수 중괄호 안에 입력
+                                     //  ^ 시작을 의미(의미가 여러개라 //안에 넣어줘야됨)
+                                     //  $ 끝을 의미
+                                     //  \d [0-9]와 같음, 숫자만 입력 가능
+                                     //  \n 줄단락 바꾸기
+                                     //  ? 1개가 조건에 맞는지 확인
+                                     //  . 글자 1개 비교
+                                     //  * 모든 글자 비교
+      let name_pattern= /^[가-힣]{2,}$/;
+
+      let pw_pattern= /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{3,5}$/;
+                            //영문자있는지 비교, 숫자비교, 특수문자비교
+
+      let id2_pattern= /^[a-b]{1}[a-bA-Z0-9]{1,7}$/;
+      let tel_pattern= /^[0-9]{2,3}-[0-9]{3,4}-\d{4}$/;
+      let phone_pattern= /^(010|011)-[0-9]{3,4}-\d{4}$/;
+      let phone1_pattern= /^01([0|1|6|7|9]?)-[0-9]{3,4}-\d{4}$/;
+      $("#membership").click(function(){
+        //정규표현식
+        if(!pw_pattern.test($("#pw").val())){
+          alert("비밀번호는 영문자,숫자,특수문자를 포함하여 3~8자리까지 가능합니다.");
+          return false;
+        }else{alert("성공");}
+
+        // if(!phone_pattern.test($("#phone").val())){
+        //   alert("010 or 011-0000-0000 입력 가능합니다.");
+        //   return false;
+        // }else{alert("성공");}
+
+        // if(!tel_pattern.test($("#tel").val())){
+        //   alert("아이디는 지역번호-국번-전화번호 4자리 입력 가능합니다.");
+        //   return false;
+        // }else{alert("성공");}
+
+
+        // if(!id2_pattern.test($("#id2").val())){
+        //   alert("아이디는 첫글자 영문소문자, \n두번째글자 이상부터 영대소문자, \n숫자 2자리 이상 8자리까지 가능합니다.");
+        //   return false;
+        // }else{alert("성공");}
+
+        // if(!name_pattern.test($("#name").val())){
+        //   alert("이름은 한글 2자리 이상 가능합니다.");
+        //   return false;
+        // }else{alert("성공");}
+
+        // if(!id_pattern.test($("#id").val())){
+        //   alert("아이디는 영문자 3자리만 가능합니다.");
+        //   return false;
+        // }else{alert("성공");} //아이디 체크
+
+      });//membership 버튼 클릭
+    });//j쿼리선언
+  </script>
+</head>
+<body>
+  <h1>회원가입</h1>
+  <form action="#" name="frm" method="post">
+    <label>아이디</label>
+    <input type="text" name="id" id="id">
+    <span>아이디는 영문자 3자리 이상 가능</span><br>
+    <label>비밀번호</label>
+    <input type="text" name="pw" id="pw">
+    <span>비밀번호는 영문자,숫자,특수문자를 포함하여 3~8자리까지 가능</span><br>
+    <label>아이디2</label>
+    <input type="text" name="id2" id="id2">
+    <span>첫글자 영문소문자, 두번째글자 이상부터 영대소문자, 숫자 2자리 이상 5자리까지 가능</span><br>
+    <label>이름</label>
+    <input type="text" name="name" id="name">
+    <span>이름은 한글 2자리 이상 가능</span><br>
+    <label>전화번호</label>
+    <input type="text" name="tel" id="tel">
+    <span>지역번호-국번-전화번호 4자리 입력 가능</span><br>
+    <label>핸드폰번호</label>
+    <input type="text" name="phone" id="phone">
+    <span>010 or 011-0000-0000 입력 가능</span><br>
+    <button type="button" id="membership">확인</button>
+    <!-- <label>비밀번호</label>
+    <input type="password" name="pw" id="pw"> -->
+  </form>
+  
+</body>
+</html>

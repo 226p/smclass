@@ -2,9 +2,37 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/style_header.css">
 		<link rel="stylesheet" type="text/css" href="css/style_join01_terms.css">
+		<link rel="stylesheet" type="text/css" href="css/style_footer.css">
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
 		<title>회원가입 - 약관동의</title>
+		<script>
+			$(function(){
+				$("#submit").click(function(){
+					if($("input[value='agree']:checked").length==3){
+					alert("이용약관 동의가 완료되었습니다.");
+					console.log($("input[value='agree']").length);
+					console.log($("input[value='agree']:checked").length);
+					return false;}
+					else{alert("모두 동의해야 회원가입이 가능합니다.");}
+				});
+
+				$("#allAgree").click(function(){
+					if(confirm("모두 동의합니다로 체크하겠습니까?")){
+						alert("동의합니다를 모두 체크합니다.");
+						$("input[value='agree']").each(function(){
+						$(this).prop("checked",true);
+					});
+					}else{
+					alert("비동의합니다를 모두 체크합니다.");
+					$("input[value='disagree']").each(function(){
+						$(this).prop("checked",true);
+					});}
+				});
+
+			});
+		</script>
 	</head>
 	<body>
 		<header>
@@ -76,7 +104,7 @@
 				<h4>
 					이용약관 동의 
 					<span>(필수동의)</span>
-					<a href="#">전체보기</a>
+					<a id="allAgree">모두동의</a>
 				</h4>
 				<div class="agreebox">
 					<article>
@@ -107,9 +135,9 @@
 					</article>
 				</div>
 				<div class="agreeRadio">
-					<input type="radio" name="f_agree" id="f_agree" value="agree" />
+					<input type="radio" name="f_agree" class="agree" value="agree" />
 					<label for="f_agree">이용약관에 동의합니다.</label>
-					<input type="radio" name="f_agree" id="f_disagree" value="disagree" />
+					<input type="radio" name="f_agree" class="disagree" value="disagree" />
 					<label for="f_disagree">동의하지 않습니다.</label>
 				</div>
 				<div class="strong_div">
@@ -119,7 +147,7 @@
 				<h4>
 					개인정보 수집, 이용 동의 
 					<span>(필수동의)</span>
-					<a href="#">전체보기</a>
+					<a>모두동의</a>
 				</h4>
 				<div class="agreebox">
 					<article>
@@ -145,9 +173,9 @@
 					</article>
 				</div>
 				<div class="agreeRadio">
-					<input type="radio" name="s_agree" id="s_agree" value="agree" />
+					<input type="radio" name="s_agree" class="agree" value="agree" />
 					<label for="s_agree">개인정보 보호를 위한 이용자 동의사항에 동의합니다.</label>
-					<input type="radio" name="s_agree" id="s_disagree" value="disagree" />
+					<input type="radio" name="s_agree" class="disagree" value="disagree" />
 					<label for="s_disagree">동의하지 않습니다.</label>
 				</div>
 				<div class="strong_div">
@@ -157,7 +185,7 @@
 				<h4>
 					개인정보 취급위탁 동의 
 					<span>(필수동의)</span>
-					<a href="#">전체보기</a>
+					<span>모두동의</span>
 				</h4>
 				<div class="agreebox">
 					<article>
@@ -175,9 +203,9 @@
 					</article>
 				</div>
 				<div class="agreeRadio">
-					<input type="radio" name="t_agree" id="t_agree" value="agree" />
+					<input type="radio" name="t_agree" class="agree" value="agree" />
 					<label for="t_agree">개인정보 취급위탁에 동의합니다.</label>
-					<input type="radio" name="t_agree" id="t_disagree" value="disagree" />
+					<input type="radio" name="t_agree" class="disagree" value="disagree" />
 					<label for="t_disagree">동의하지 않습니다.</label>
 				</div>
 				<div class="strong_div">
