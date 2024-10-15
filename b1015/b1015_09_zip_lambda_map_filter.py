@@ -1,3 +1,8 @@
+result = 1
+for i in range(1,5):
+  result *= i  # 재귀함수
+
+
 # quiz 
 a = [1,2,3,4,5]
 
