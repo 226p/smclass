@@ -1,11 +1,19 @@
 # 학생성적프로그램 / 딕셔너리 타입으로 구현할 것
-students = [
-  {"no":1,"name":"홍길동","kor":100,"eng":100,"math":99,"total":299,"avg":99.67,"rank":0},
-  {"no":2,"name":"유관순","kor":80,"eng":80,"math":85,"total":245,"avg":81.67,"rank":0},
-  {"no":3,"name":"이순신","kor":90,"eng":90,"math":91,"total":271,"avg":90.33,"rank":0},
-  {"no":4,"name":"강감찬","kor":60,"eng":65,"math":67,"total":192,"avg":64.00,"rank":0},
-  {"no":5,"name":"김구","kor":100,"eng":100,"math":84,"total":284,"avg":94.67,"rank":0},
-]
+students = []
+s_key = ["no","name","kor","eng","math","total","avg","rank"]
+
+f = open("students.txt","r",encoding="utf-8")
+while True:
+  line = f.readline()
+  if not line: break
+  s = line.strip().split(",")
+  for i in range(7):
+    if i==1: continue
+    elif i==6: s[6] = float(s[6])
+    else: s[i] = int(s[i])
+  students.append(dict(zip(s_key,s)))
+print(students)
+f.close()
 
 # 학생성적프로그램에 필요한 전역변수
 stuNo = len(students)
@@ -50,6 +58,13 @@ def stu_input(stuNo):    # 1. 학생성적 입력 함수 - 일반변수
       ss = {"no":no, "name":name, "kor":kor, "eng":eng, "math":math, "total": total, "avg":avg, "rank":0}
       students.append(ss)
       stuNo += 1
+
+      f = open("students.txt","w",encoding="utf-8")
+      for s in students:
+        f.write(f"{s['no']},{s['name']},{s['kor']},{s['eng']},{s['math']},{s['total']},{s['avg']},{s['rank']}\n")
+      f.close()
+
+
       print(f"{name}의 성적이 정상적으로 입력되었습니다.")
       print()
   return stuNo   # while문 종료시킬 수 있어 while문 밖에 써야 함
@@ -61,7 +76,7 @@ def stu_output(students):    # 2. 학생성적 출력 함수
   print()
   print("-"*60)
   for s in students:
-      print(f"{s['no']}\t{s['name']}\t{s['kor']}\t{s['eng']}\t{s['math']}\t{s['total']}\t{s['avg']:.2f}\t{s['rank']}")
+    print(f"{s['no']}\t{s['name']}\t{s['kor']}\t{s['eng']}\t{s['math']}\t{s['total']}\t{s['avg']:.2f}\t{s['rank']}")
   print()
 
 def stu_update(students):    # 3. 학생성적 수정 함수
