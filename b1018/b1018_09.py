@@ -59,7 +59,7 @@ while True:
     name = input("수정하고자 하는 학생의 이름을 입력하세요. >>")
     chk = 0
     for idx,s in enumerate(Student.students):
-      if name == s.name:    # s[name] 위치값 찾기 ?? !
+      if name == s.name:   
         print(f"{name} 학생의 정보를 찾았습니다.")
         chk = 1
     if chk == 0:
