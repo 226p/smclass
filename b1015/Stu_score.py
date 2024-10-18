@@ -2,7 +2,7 @@
 from S_func import *
 
 
-# 학생성적프로그램
+# 학생성적프로그램    --> 함수 외부로 분리
 while True:
     choice = title_program()    # 함수호출 - 메뉴
     if choice == '1':
