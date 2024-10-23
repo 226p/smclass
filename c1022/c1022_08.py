@@ -49,11 +49,36 @@ for idx,list in enumerate(lists):
       print()
       n_list = [link,name,price,rating,num,img]
       n_lists.append(n_list)
-    else: print(f"{idx+1}. 제외")
+    else:
+      print(f"[{idx} 번째 ] : 제외")
   except Exception as e:
+    print(f"{idx}:에러",e)
     pass
 
 print(n_lists)  # 왜 안 넣어지는지~확인요망
+
+# while True:
+#   print("[ 노트북 비교 ]")  
+#   print("1. 금액정렬")  
+#   print("2. 금액역순정렬")  
+#   print("3. 평점정렬")  
+#   print("4. 평점역순정렬")  
+#   print("0. 종료")
+#   print("-"*50)  
+#   choice = input("원하는 번호를 입력하세요.")  
+
+#   if choice == "1":
+#     # n_lists.sort()
+#     pass
+#   elif choice == "2":
+#     pass
+#   elif choice == "3":
+#     pass
+#   elif choice == "4":
+#     pass
+#   elif choice == "5":
+#     print("프로그램 종료")
+#     break
 
 
 
