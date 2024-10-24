@@ -64,11 +64,11 @@ time.sleep(random.randint(2,5))
 # 데이터를 검색하는 동안 대기상태
 time.sleep(7)
 
-# # 화면 대기 함수
+## 화면 대기 함수
 # from selenium.webdriver.support.ui import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC 
 
-# # 화면에 찾으려고 하는 <html>요소가 있는지 확인
+## 화면에 찾으려고 하는 <html>요소가 있는지 확인
 # elem = WebDriverWait(browser, 120).until(lambda x: x.find_element(By.XPATH,'//*[@id="__next"]/div/main/div[4]/div/div[2]'))
 ## 화면 스크롤 내리기
 prev_height = browser.execute_script("return document.body.scrollHeight")  # 현재 스크롤 위치 검색
