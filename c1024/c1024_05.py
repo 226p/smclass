@@ -66,8 +66,8 @@ for idx,d in enumerate(data):
   tYpe = d.select_one("span.type").text.strip()
   price = d.select_one("span.price").text.strip()
   spec = d.select_one("span.spec").text.strip()
-  if tYpe.find("매매") == -1:
-    if tYpe.find("전세") == -1:
+  if tYpe.find("매매"):
+    if tYpe.find("전세"):
       print(f"{idx+1}. 제외")
       num_w += 1
       pass
