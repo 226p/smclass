@@ -1,0 +1,30 @@
+*** ORACLE SQL DEVELOPER 에서 실행 ***
+[ 테이블스페이스 생성하기 ]
+create tablespace myts datafile
+'c:\dboracle\myts.dbf' size 100m autoextend on next 5m;
+
+[ 사용자 생성 ]
+create user ora_user identified by 1234
+default tablespace myts
+temprary tablespace temp;
+
+[ 롤 부여하기 ]
+grant dba to ora_user;
+
+
+*** CMD 창에서 실행 ***
+
+[ 파일 import 방법 ]
+
+1.
+c:\backup 폴더를 만들고
+expall.dmp, expcust.dmp 파일을 복사한다.
+
+2. 
+imp ora_user/1111 file=expall.dmp log=empall.log ignore=y grants=y rows=y indexes=y full=y
+( 입력후 enter를 누른다. )
+
+3. 
+imp ora_user/1234 file=expcust.dmp log=expcust.log ignore=y grants=y rows=y indexes=y full=y
+( 입력후 enter를 누른다. )
+
