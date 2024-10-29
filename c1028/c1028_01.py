@@ -21,10 +21,13 @@ sql = "select * from member"
 cursor.execute(sql)
 rows = cursor.fetchall()
 
+
+# print(rows[0][0],rows[0][1],rows[0][2],rows[0][3])
 for row in rows:
   print(row)
 
-# print(rows[0][0],rows[0][1],rows[0][2],rows[0][3])
+with open("c1028/member.txt","w",encoding="utf-8") as f:
+    pass
 
 # 꼭 끊어줘야 함
 conn.close()
