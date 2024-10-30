@@ -22,7 +22,7 @@ smtpPort = 587
 # id, pw, 받는사람이메일주소
 
 sendEmail = "qkrdnwjd0893@naver.com"
-pw = "gkdlfn0893!"
+pw = "-"
 recvEmail = "sh097b@naver.com"
 
 title = "제목 : 파이썬 이메일보내기 안내"

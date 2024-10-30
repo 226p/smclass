@@ -63,7 +63,7 @@ smtpName = "smtp.naver.com"
 smtpPort = 587
 
 sendEmail = "qkrdnwjd0893@naver.com"
-pw = "gkdlfn0893!"
+pw = "-"
 recvEmail = "qkrdnwjd0893@naver.com"
 
 title = "제목 : 파이썬 이메일보내기 안내"
