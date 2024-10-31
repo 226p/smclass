@@ -19,7 +19,7 @@ while True:
   print("2. 비밀번호 찾기")
   print("3. 회원가입")
   print("0. 프로그램 종료")
-  print("-"*30)
+  print()
   choice = input("원하는 번호를 입력하세요. >> ")
 
   if choice == '1':
