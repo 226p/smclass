@@ -4,7 +4,6 @@ import smtplib
 from email.mime.text import MIMEText
 import func
 
-
 def connects():  ### db연결 함수
   user = 'ora_user'
   password = '1111'
@@ -13,50 +12,24 @@ def connects():  ### db연결 함수
   except Exception as e: print("예외처리 :",e)
   return conn
 
+def member_count():
+  conn = connects()
+  cursor = conn.cursor()
+  sql = "select count(*) from mem"
+  cursor.execute(sql)
+  row =cursor.fetchone()
+  print(row)
+  cursor.close()
+  return row[0]
 
-def random_pw():  ### 랜덤비밀번호 발급 함수
-  a = random.randrange(0,10000) # 0-9999
-  ran_num = f"{a:04}"
-  return ran_num
-
-
-def emailSand(email):  ### 이메일 비밀번호 발송 함수
-  #email 발송
-  smtpName = "smtp.naver.com"
-  smtpPort = 587
-
-  sendEmail = 'qkrdnwjd0893@naver.com'
-  pw = "7VZNPVDYKYRK"
-  recvEmail = email
-
-  ran_num = random_pw()
-
-  title = '[ 메일발송 ] 임시 비밀번호 발급 안내'
-  content = ran_num
-  content = "임시 비밀번호 : "+content
-
-  # 설정
-  msg = MIMEText(content)
-  msg['Subject'] = title
-  msg['From'] = sendEmail
-  msg['To'] = recvEmail
-
-  # 서버이름,서버포트
-  s = smtplib.SMTP(smtpName,smtpPort)
-  s.starttls()
-  s.login(sendEmail,pw)
-  s.sendmail(sendEmail,recvEmail,msg.as_string())
-  s.quit()
-
-  print("메일 발송 완료")
-  return ran_num
-
-
+### 회원수 확인값 리턴
+all_member = member_count()
 def screen():  ### 시작화면 함수선언
   print("[ 커뮤니티 ]")
+  print(f"현재 회원수 : {all_member}")
   print("1. 로그인")
-  print("2. 비밀번호 찾기")
-  print("3. 회원가입")
+  print("2. 회원가입")
+  print("3. 회원정보 수정")
   print("0. 프로그램 종료")
   print("-"*30)
   choice = input("원하는 번호를 입력하세요. >> ")
@@ -71,10 +44,10 @@ def memLogin():  ### 로그인 함수
   ## db접속
   conn = connects()
   cursor = conn.cursor()
-  sql = "select * from member where id=:id and pw=:pw"
+  sql = "select * from mem"
   cursor.execute(sql,id=user_id,pw=user_pw)
   row =cursor.fetchone()
-  conn.close()
+  cursor.close()
   if row == None:
     print("로그인에 실패하였습니다. 아이디 또는 비밀번호를 확인해주세요.")
     return
