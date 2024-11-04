@@ -28,16 +28,21 @@ while True:
   choice = input("원하는 번호를 입력하세요. >>")
 
   if choice == '1':
+    conn = connects()
+    cursor = conn.cursor()
+    sql = "select students_seq.currval from dual"
+    cursor.execute(sql)
+    row = cursor.fetchone()
+  
     print("[ 학생성적 입력 ]")
-    name = input("학생 이름을 입력하세요. >> ")
+    no = 0
+    name = input(f"{no}학생 이름을 입력하세요. >> ")
     kor = int(input("국어점수를 입력하세요. >> "))
     eng = int(input("영어점수를 입력하세요. >> "))
     math = int(input("수학점수를 입력하세요. >> "))
     total = kor+eng+math
     avg = total/3
 
-    conn = connects()
-    cursor = conn.cursor()
     s_list = [name,kor,eng,math,total,avg]
     sql = 'insert into students (no,name,kor,eng,math,total,avg) values (students_seq.nextval,:1,:2,:3,:4,:5,:6)'
     cursor.execute(sql,s_list)
