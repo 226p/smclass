@@ -1,11 +1,12 @@
 import oracledb
 
+# db 연결함수
 def connects():
   user = 'ora_user'
   password = '1111'
   dsn = 'localhost:1521/xe'
   try : conn = oracledb.connect(user=user,password=password,dsn=dsn)
-  except Exception as e : pass
+  except Exception as e : print("예외처리 :",e)
   return conn
 
 # 학생성적프로그램
