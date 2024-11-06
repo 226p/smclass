@@ -1,5 +1,4 @@
 import oracledb
-import stu_func
 
 def connects():  ### db연결 함수
   user = 'ora_user'
@@ -60,6 +59,18 @@ def stu_output():  ### 학생성적 출력 함수
   
   conn.close()
   return
+
+def stu_print(*data):
+  conn = connects
+  cursor = conn.cursor()
+
+  if len(data) == 1:
+    sql = data[0]
+  else : 
+    sql = data[0]
+    search = data[1]
+    cursor.execute(sql,search)
+
 
 def stu_search():  ### 학생성적 검색 함수
   print("[ 학생성적 검색 ]")
