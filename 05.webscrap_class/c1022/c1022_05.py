@@ -16,7 +16,7 @@ tits = stocks[0].select("th")
 title = []
 st_lists = []
 
-f = open("c1022/stock.tct","w",encoding="utf-8")
+f = open("c1022/stock.txt","w",encoding="utf-8")
 
 for t in tits:
   title.append(t.text)
