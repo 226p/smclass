@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>학생성적 입력</title>
+</head>
+<body>
+  <div>
+    <h2>학생성적 입력</h2>
+    <form action="" method='post' name='sfrm'>
+      {% csrf_token %}
+      <label>이름</label><br>
+      <input type="text" name="name">
+      <label>전공</label><br>
+      <input type="text" name="major">
+      <label>학년</label><br>
+      <input type="text" name="grade">
+      <label>나이</label><br>
+      <input type="text" name="age">
+      <label>성별</label><br>
+      <input type="radio" name="gender" id="M" value="M">
+      <label for='M'>남자</label>
+      <input type="radio" name="gender" id="F" value="F">
+      <label for='F'>여자</label>
+      <input type='submit' value='저장'>
+      <button onclick="cancel()">취소</button>
+    </form>
+    <ul>
+      <li><a href='/'>메인화면</a></li>
+      <li><a href='/board/list/'>게시판</a></li>
+    </ul>
+    <script>
+      function cancel(){
+        location.href='/'
+      }
+    </script>
+  </div>
+</body>
+</html>
