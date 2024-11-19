@@ -5,6 +5,7 @@ app_name = 'students'   # app_name 설정
 urlpatterns = [
          # url이름, view호출, name이름
     path('write/', views.write, name='write'),  
+    path('search/', views.search, name='search'),  
     path('list/', views.list, name='list'),  
     path('<str:name>/view/', views.view, name='view'),  # view
     path('update/', views.update, name='update'),  # update 파라미터

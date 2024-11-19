@@ -30,7 +30,8 @@ def write(request):  # 1. 학생등록페이지 호출 / 2. 학생데이터 입�
 
 
 def list(request):  # 학생전체리스트 호출
-  qs = Student.objects.all()
+  qs = Student.objects.order_by('-grade','name')   # order_by 정렬 / 역순은 앞에 -
+  # qs = Student.objects.all()
   context = {"slist":qs}
   return render(request,'list.html',context)
 
@@ -72,3 +73,11 @@ def delete(request,name):  # 학생정보 삭제
   print("삭제정보 이름 :",name)
   Student.objects.get(name=name).delete()
   return redirect('/students/list/')
+
+def search(request):  # 학생 검색
+  search = request.GET.get('search')
+  print("검색단어 :",search)
+  ## 데이터 검색
+  qs = Student.objects.filter(name=search)
+  context = {"slist":qs}
+  return render(request,'list.html',context)

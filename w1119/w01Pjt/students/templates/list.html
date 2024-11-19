@@ -13,12 +13,17 @@
     table{width: 1200px; margin: 30px auto;}
     th, td{width: 120px; width: 200px;}
     button{width: 120px; height: 40px;}
+    .search{width: 190px; height: 40px; margin-top: 50px; padding-left: 15px;}
   </style>
 </head>
 <body>
   <div class='main'>
     <h2>학생전체리스트</h2>
     <h4>등록인원 : 총 {{slist.count}}명</h4>
+    <form action="{% url 'students:search' %}" method="get" name="sfrm">
+      <input type="search" name="search" class="search">
+      <button type="submit" class="sbtn">검색</button>
+    </form>
     <!-- <h2>{{slist}}</h2> -->
     <table>
       <tr>
