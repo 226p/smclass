@@ -78,6 +78,7 @@ def search(request):  # 학생 검색
   search = request.GET.get('search')
   print("검색단어 :",search)
   ## 데이터 검색
-  qs = Student.objects.filter(name=search)
+  # qs = Student.objects.filter(name=search)
+  qs = Student.objects.filter(name__contains=search)
   context = {"slist":qs}
   return render(request,'list.html',context)
