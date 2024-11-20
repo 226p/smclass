@@ -1,0 +1,11 @@
+from django.contrib import admin
+from member.models import Member
+
+@admin.register(Member)
+class MemberAdmin(admin.ModelAdmin):
+  list_display = ['id','pw','name','nickName','mdate']
+
+# class MemberAdmin(admin.ModelAdmin):
+#   list_display = ['id','pw','name','nickName','mdate']
+
+# admin.site.register(Member,MemberAdmin)
