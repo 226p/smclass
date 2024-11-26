@@ -58,7 +58,7 @@
             <td><span class="table-notice">{{board.bno}}</span></td>
             <td class="table-title">
             {% comment %} <a href="{url 'board:bview' board.bno }">{{board.btitle}}</a> {% endcomment %}
-            <a href="/board/bview/{{board.bno}}/?npage={{npage}}/">
+            <a href="/board/bview/{{board.bno}}/?npage={{npage}}">
               {% if board.bindent %}
                 {% for i in ""|rjust:board.bindent %}└{% endfor %}
               {% endif %}
