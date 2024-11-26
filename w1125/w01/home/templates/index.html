@@ -3,14 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>메인페이지</title>
-  <style>
-    a{cursor: pointer;}
-  </style>
+  <style>a{cursor: pointer;}</style>
   <script>
     function logoutBtn(){
-      if(alert('로그아웃되었습니다.'));
+      alert("로그아웃 되었습니다.")
       location.href='/member/logout/';
     }
   </script>
@@ -18,17 +15,18 @@
 <body>
   <h2>메인페이지</h2>
   {% if not request.session.session_id %}
-  <h4>로그인을 해야 다른기능 사용이 가능합니다.</h4>
+  <h4>로그인을 하셔야 사용이 가능합니다.</h4>
   <ul>
     <li><a href='/member/login/'>로그인</a></li>
   </ul>
   {% else %}
-  <h4>{{request.session.session_nickName}}님 환영합니다.</h4>
+  <h4>{{request.session.session_nicName}} 님 환영합니다.</h4>
   <ul>
     <li><a onclick='logoutBtn()'>로그아웃</a></li>
-    <li><a href='/board/blist/'>게시판</a></li>
-    <li><a href='/admin/'>관리자페이지</a></li>
+    <li><a href='/admin/'>admin관리자</a></li>
+    <li><a href='/board/blist/'>게시판리스트</a></li>
   </ul>
   {% endif %}
+  
 </body>
 </html>
