@@ -37,7 +37,7 @@ def bwrite(request):   # 1. 글쓰기페이지 호출 / 2. 글쓰기 저장
     context = {'wmsg':'1'}
     return render(request,'bwrite.html',context)
 
-def bview(request,bno):   # 글 상세보기
+def bview(request,bno):   # 1. 글 상세보기 / 2. 조회수 증가 / 3. 이전글, 다음글
   npage = request.GET.get('npage',1)
   qs = Board.objects.get(bno=bno)
 
