@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>티맵 OpenAPI</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/test.css' %}">
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=IOWlgu3VCB5vrfwE0YE0w3e24rgK4g612MZZEILt"></script>
+</head>
+<body>
+
+    <div id="map_div" style="position: relative;">
+        <div class="_map_layer_overlay" style="padding-top: 10px;">
+            <div class="__space_10_h"></div>
+            <div class="api_etc_btns _map_overlay_row __flex_align_start" >
+                <div style="margin-left:35px;"></div>
+                <div id="measureDistance" class="_btn_radio" onclick="measureDistance();">기본</div>
+                <div class="__space_10_w"></div>
+                <div id="squareMap" class="_btn_radio" onclick="squareMap();">혼잡도</div>
+                <div class="__space_10_w"></div>
+                <div id="autoTraffic" class="_btn_radio" onclick="autoTraffic();">교통정보</div>
+                <div class="__space_10_w"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var mapping=""
+        var map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
+            center: new Tmapv2.LatLng(37.57428804486318, 126.97957992553754),    // 지도의 중심좌표
+            width : "750px", // 지도의 넓이
+            height : "750px", // 지도의 높이
+            zoom : 13, // 지도의 줌레벨
+            httpsMode: true,    // https모드 설정
+        });
+        
+        // 지도 타입 변경: ROAD
+        map.setMapType(Tmapv2.Map.MapType.ROAD);
+
+
+        var measureDistanceObject = null;
+
+        // 직선거리 안내
+        function measureDistance() {
+            resetMeasureObject();
+            $(".api_etc_btns > div#measureDistance").addClass("__color_blue_fill");
+            $(".api_etc_labels > div:eq(0)").show();
+            
+            
+            measureDistanceObject = new Tmapv2.extension.MeasureDistance({
+                map: map
+            });
+
+            htmldata = ""
+            
+            $("#map_wrap").html(htmldata);
+        }
+
+        var measureRadiusObject = null;
+
+        // 반경 안내
+        function measureRadius() {
+            resetMeasureObject();
+            $(".api_etc_btns > div#measureRadius").addClass("__color_blue_fill");
+            $(".api_etc_labels > div:eq(0)").show();
+
+            measureRadiusObject = new Tmapv2.extension.MeasureRadius({
+                map: map
+            });
+        }
+
+        var squareMapObject = null;
+
+        // 사각형 지도 
+        function squareMap() {
+            resetMeasureObject();
+            $(".api_etc_btns > div#squareMap").addClass("__color_blue_fill");
+            $(".api_etc_labels > div:eq(2)").show();
+
+            var bounds = new Tmapv2.base.LatLngBounds();
+            var array = [];
+            for (var i = 0; i < 1000; i++) {
+                var object = {};
+                object.lng = 126.977028 + Math.random() / 40;
+                object.lat = 37.565354 + Math.random() / 40;
+                object.value = Math.round((Math.random() * 100 % 10));
+                array.push(object);
+                bounds.extend(new Tmapv2.LatLng(object.lat, object.lng));
+            }
+
+            squareMapObject = new Tmapv2.extension.SquareMap({
+                map: map,
+                strokeOpacity: 0.8,
+                fillOpacity: 0.6,
+                size: 200,
+                values: [10, 20, 30, 40, 50, 60],
+                colors: ['#f8fcca', '#ecf8b2', '#91d4b9', '#1e90bf', '#24489d', '#1e2f89'],
+                data: {
+                    data: array,
+                    max: 10
+                }
+            });
+
+            map.fitBounds(bounds);
+
+            htmldata = ""
+            htmldata += `<div id="map_div" class="map_wrap" style='position :relative; bottom:-20px;'></div><div style='position :relative; bottom:135px; left:10px; width:95px;height:140px;text-align:center; background:#ffffff ;border: 1px solid #808080;border-radius: 3px;font-size:12px'>장소혼잡도 단계
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#9cf7bd;border-radius: 3px; margin:3px auto'>여유</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#73b7ff;border-radius: 3px;margin:3px auto'>보통</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#d9a8ed;border-radius: 3px;margin:3px auto'>혼잡</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#ff96b4;border-radius: 3px;margin:3px auto'>매우 혼잡</div>
+      </div>`
+            
+            $("#map_wrap").html(htmldata);
+
+
+        }
+
+        var tData = new Tmapv2.extension.TData();
+
+        // 교통정보
+        function autoTraffic() {
+            resetMeasureObject();
+            $(".api_etc_btns > div#autoTraffic").addClass("__color_blue_fill");
+            $(".api_etc_labels > div:eq(2)").show();
+            
+            tData.autoTraffic(map, {"trafficOnOff" : true});
+            
+            htmldata = ""
+            htmldata += `<div id="map_div" class="map_wrap" style='position :relative; bottom:-20px;'></div><div style='position :relative; bottom:135px; left:10px; width:95px;height:140px;text-align:center; background:#ffffff ;border: 1px solid #808080;border-radius: 3px;font-size:12px'>교통상황 단계
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#99cc00;border-radius: 3px; margin:3px auto'>여유</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:yellow;border-radius: 3px;margin:3px auto'>보통</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:orange;border-radius: 3px;margin:3px auto'>혼잡</div>
+        <div style='width:84px;height:25px; border: 1px solid #808080; text-align:center; background:#cc0000;border-radius: 3px;margin:3px auto'>매우 혼잡</div>
+      </div>`
+            
+            $("#map_wrap").html(htmldata);
+        }
+
+        // (부가정보 공통) 지도 초기화
+        function resetMeasureObject() {
+            $(".api_etc_btns > div").removeClass("__color_blue_fill");
+            $(".api_etc_labels > div").hide();
+            
+            // 직선거리 오브젝트 제거
+            if(measureDistanceObject) {
+                measureDistanceObject.remove();
+            }
+
+            // 반경 오브젝트 제거
+            if(measureRadiusObject) {
+                measureRadiusObject.remove();
+            }
+
+            // 사각지도 오브젝트 제거
+            if(squareMapObject) {
+                squareMapObject.destroy();
+            }
+
+            // 교통정보 제거
+            try {
+                tData.autoTraffic(map, {"trafficOnOff" : false});
+            } catch(error) {}
+        }
+    </script>
+    <div id="map_wrap" class="map_wrap3" style="height:450px">
+      
+    </div>
+<!-- 하단 부분 -->
+<footer>
+  <div class="footer">
+    <div class="ftnavi">
+      <ul>
+        <li><a href="">회사소개</a></li>
+        <li><a href="">오시는길</a></li>
+        <li><a href="">개인정보처리방침</a></li>
+        <li><a href="">영상정보처리기기운영관리방침</a></li>
+        <li><a href="">이용약관</a></li>
+        <li><a href="">이메일무단수집거부</a></li>
+      </ul>
+      <div class="addr">
+        <p>포레스트 리솜<span>|</span>충청북도 제천시 백운면 금봉로 365</p>
+        <p class="tel">대표번호 : 043-649-6000&nbsp;&nbsp;
+        <span>예약문의 : 1600-0060</span>
+        <span>단체문의 : 02-6177-5999</span>
+        <span>분양문의 : 02-567-5555</span>
+        <span>통신판매업신고 : 2011-충북제천-0016호</span>
+        </p>
+        <p>메리츠화재와 개인정보 배상책임보험 계약을 체결하여 회원 개인정보를 보호하고 있습니다.</p>
+        <p class="copy">COPYRIGHT(C) HOBAN HOTEL & RESORT. ALL RIGHTS RESERVED.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="sns">
+        <a href="#"><img src="/static/images/insta_btn_fnew.png"></a>
+        <a href="#"><img src="/static/images/youtube_btn_fnew.png"></a>
+        <a href="#"><img src="/static/images/facebook_btn_fnew.png"></a>
+        <a href="#"><img src="/static/images/kakao_ch_btn_fnew.png"></a>
+      </div>
+      <div class="group">
+        <select name="site_go" id="site_go" class="sel_box">
+          <option value="#">패밀리사이트</option>
+          <option value="https://www.ihoban.co.kr/web">호반건설</option>
+          <option value="https://www.hobanapt.co.kr/web">호반베르디움</option>
+        </select>
+        <button type="button">GO</button>
+      </div>
+    </div>
+  </div>
+</footer>
+</main>
+</body>
+</html>

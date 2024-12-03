@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path('foodBoard/', include('foodBoard.urls')),
     path('map/', include('map.urls')),
+    path('board/', include('board.urls')),
 ]
 
 

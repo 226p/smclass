@@ -7,11 +7,12 @@
   font-style: normal;}
 ul, ol{list-style: none;}
 a{text-decoration: none; color: inherit; cursor: pointer;}
+main{width: 100%; box-sizing: border-box;}
 
 /* header부분 */
 *{margin: 0; padding: 0;}
 header{height: 100px;}
-.inner{margin: 50px;}
+.inner{margin: 50px; box-sizing: border-box;}
 ul, li, span {display: inline-block; text-align: center;}
 ul{margin: 0 auto;}
 li{margin-right: 20px;}
@@ -72,6 +73,36 @@ h4{margin: 50px; font-size: 25px;}
 .bottom_slide>p{font-size: 20px; margin: 5px 15px; color: #666;}
 .bottom_content>strong{font-size: 18px; margin: 15px;}
 .bottom_content>p{font-size: 18px; font-weight: 400; margin: 5px 15px;}
+
+/* 소통게시판 */
+#list_search{width: 50%; height: 50px; position: relative; left: 400px; top: 40px;}
+#seBtn{width: 50px; height: 50px; position: relative; left: 400px; top: 40px;}
+
+.board{position: relative; box-sizing: border-box;}
+.here{width: 100%; height: 100px; position: relative; top: 25px; margin-left: 50px; margin-top: 10px;}
+.here>div{color: #767676;}
+.here>i{color: black;}
+.here>i, strong{color: black;}
+.here>h2{font-size: 30px; margin: 10px auto;}
+
+.b_category{width: 10%; height: 580px; position: relative; top: 50px; margin-left: 50px; display: inline-block; box-sizing: border-box;}
+.b_category>ul{font-size: 20px; text-align: left; position: absolute; bottom: 0px;}
+.b_category>ul>li{margin: 10px;}
+#heart{width: 20px; height: 20px; position: relative; top: 2px;}
+
+.nlist{width: 80%; height: 2000px; display: inline-block; box-sizing: border-box;
+  position: absolute; top: 50px; box-sizing: border-box;}
+.nlist>ul>li{text-align: left; width: 1500px; height: 200px; padding-left: 5%;}
+.nlist>ul>li>h3{font-size: 25px; margin-bottom: 5px;}
+.nlist>ul>li>p{font-size: 20px; margin-bottom: 5px;}
+.nlist>ul>li>span{font-size: 20px; color: #767676;}
+
+#add>img{width: 80px; height: 80px; position: fixed; bottom: 50px; right: 100px;}
+
+
+/* 게시판 커뮤니티 */
+.bwrite{width: 100%; height: 1000px; border: 1px solid black; position: relative; top: 50px; box-sizing: border-box;}
+#writeFrm{width: 80%; height: 800px; border: 1px solid red; margin: 0 auto;}
 
 
 /* 맨 하단 */

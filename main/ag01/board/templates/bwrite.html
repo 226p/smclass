@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" href="{% static '/css/bwrite.css' %}">
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <title>ANG-GGO</title>
+</head>
+<body>
+  <!-- 헤더 부분 -->
+  <header>
+    <div class="inner">
+      <a href="/"><span class="main_logo">로고</span></a>
+      <ul>
+        <a href="/map/mview/"><li>지도</li></a>
+        <a href="/foodBoard/blist/"><li>맛집추천</li></a>
+        <a href="/board/nboard/"><li>게시판</li></a>
+        <li>예약</li>
+        <li>이벤트</li>
+        <li>브랜드 소개</li>
+      </ul>
+      <span>
+        <button type="button" class="ag_my">로그인/회원가입</button>
+      </span>
+    </div>
+    <hr>
+  </header>
+
+  <!-- 메인 실행 -->
+  <main>
+    <div class="here">
+      <div class="sub_navloc">HOME&nbsp;&nbsp; <i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시판&nbsp;&nbsp; <strong><i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시글 작성</strong></div>
+    </div>
+    <div class="bwrite">
+      <form action="" name="writeFrm" id="writeFrm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+          <colgroup>
+            <col width="15%">
+            <col width="85%">
+          </colgroup>
+          <tr>
+            <th>작성자</th>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;id</td>
+          </tr>
+          <tr>
+            <th class="star">제목</th>
+            <td><input type="text" name="btitle" id="btitle" placeholder="제목을 입력해주세요."></td>
+          </tr>
+          <tr>
+            <th class="star">커뮤니티 선택</th>
+            <td>
+              <select name="community" id="community">
+                <option value="추천맛집" id="yum">추천맛집😋</option>
+                <option value="감성카페" id="cafe">감성카페☕</option>
+                <option value="취미" id="hobby">취미🎮</option>
+                <option value="웨이팅" id="waiting">웨이팅👥</option>
+                <option value="실시간공유" id="live">실시간공유🗫</option>
+                <option value="생활/편의" id="life">생활/편의🧼</option>
+                <option value="교통" id="traffic">교통🚗</option>
+                <option value="풍경" id="scene">풍경🌴</option>
+                <option value="사건사고" id="accident">사건사고😈</option>
+                <option value="기타" id="etc">기타🔍</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th class="star">내용</th>
+            <td>
+              <textarea name="bcontent" id="bcontent" cols="50" rows="10" placeholder="내용을 입력해주세요."></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th>이미지 표시</th>
+            <td>
+              <input type="file" onchange="readURL(this);" name="bfile" id="file">
+            </td>
+          </tr>
+          
+          <!-- <tr>
+            <th>이미지 확인</th>
+            <td id="txt"><img id="preview" src="" style="width: 200px;"></td>
+          </tr> -->
+        </table>
+        <div class="button-wrapper">
+          <button type="button" class="write">작성완료</button>
+          <button type="button" class="cancel" onclick="javascript:location.href='/board/nboard/'">취소</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- 하단 부분 -->
+  <footer>
+    <div class="footer">
+      <div class="ftnavi">
+        <ul>
+          <li><a href="">회사소개</a></li>
+          <li><a href="">오시는길</a></li>
+          <li><a href="">개인정보처리방침</a></li>
+          <li><a href="">영상정보처리기기운영관리방침</a></li>
+          <li><a href="">이용약관</a></li>
+          <li><a href="">이메일무단수집거부</a></li>
+        </ul>
+        <div class="addr">
+          <p>포레스트 리솜<span>|</span>충청북도 제천시 백운면 금봉로 365</p>
+          <p class="tel">대표번호 : 043-649-6000&nbsp;&nbsp;
+          <span>예약문의 : 1600-0060</span>
+          <span>단체문의 : 02-6177-5999</span>
+          <span>분양문의 : 02-567-5555</span>
+          <span>통신판매업신고 : 2011-충북제천-0016호</span>
+          </p>
+          <p>메리츠화재와 개인정보 배상책임보험 계약을 체결하여 회원 개인정보를 보호하고 있습니다.</p>
+          <p class="copy">COPYRIGHT(C) HOBAN HOTEL & RESORT. ALL RIGHTS RESERVED.</p>
+        </div>
+      </div>
+      <div class="right">
+        <div class="sns">
+        </div>
+        <div class="group">
+          <select name="site_go" id="site_go" class="sel_box">
+            <option value="#">패밀리사이트</option>
+            <option value="https://www.ihoban.co.kr/web">호반건설</option>
+            <option value="https://www.hobanapt.co.kr/web">호반베르디움</option>
+          </select>
+          <button type="button">GO</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
