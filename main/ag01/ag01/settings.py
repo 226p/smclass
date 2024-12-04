@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'foodBoard',
     'map',
     'board',
+    'member',
 ]
 
 MIDDLEWARE = [

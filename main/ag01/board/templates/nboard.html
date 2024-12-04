@@ -8,6 +8,87 @@
   <link rel="stylesheet" type="text/css" href="{% static '/css/foodBoard.css' %}">
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>ANG-GGO</title>
+  <script>
+    // 1. 사이트 GPS 출력
+    $(function() {
+        const radius = 6371; // 지구 반지름 (단위: km)
+
+        // 두 지점 간의 거리 계산 함수 (Haversine 공식)
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const toRad = (value) => (value * Math.PI) / 180;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) ** 2 +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+                      Math.sin(dLon / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return radius * c; // 단위: km
+        }
+
+        // Geolocation API로 현재 위치를 가져옴
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                const userLat = pos.coords.latitude;
+                const userLon = pos.coords.longitude;
+
+                $('#latitude').html(userLat); // 위도
+                $('#longitude').html(userLon); // 경도
+
+                // CSV 파일 읽기
+                $.ajax({
+                    url: '/static/좌표데이터.csv', // static 폴더에 있는 파일
+                    dataType: 'text',
+                    success: function(data) {
+                        processCSVData(data, userLat, userLon);
+                    },
+                    error: function() {
+                        alert('CSV 파일을 읽는 데 실패했습니다.');
+                    }
+                });
+            });
+        } else {
+            alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
+        }
+
+        // CSV 데이터를 처리하는 함수
+        function processCSVData(data, userLat, userLon) {
+            const lines = data.split("\n"); // 줄 단위로 나눔
+            let nearestLocation = null; // 가장 가까운 위치
+            let minDistance = Infinity; // 최소 거리
+
+            for (let i = 1; i < lines.length; i++) { // 첫 번째 줄은 헤더
+                const line = lines[i].trim();
+                if (line) {
+                    const columns = line.split(",");
+                    const 시도 = columns[0];
+                    const 시군구 = columns[1];
+                    const 위도 = parseFloat(columns[4]);
+                    const 경도 = parseFloat(columns[5]);
+
+                    // 사용자 위치와의 거리 계산
+                    const distance = getDistance(userLat, userLon, 위도, 경도);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearestLocation = `${시도} ${시군구}`;
+                        nearestLocation_s = `${시군구}`;
+                    }
+                }
+            }
+
+            // 가장 가까운 위치 출력
+            if (nearestLocation) {
+                $("#gps").html(`<h2>${nearestLocation}</h2>`);
+            } else {pass}
+            // 가장 가까운 위치 출력
+            if (nearestLocation_s) {
+                $("#gps_s").html(`<h2>${nearestLocation_s}  <i class="fa-solid fa-location-dot"></i></h2>`);
+            } else {
+                $("#gps_s").html("<p>근처에 데이터가 없습니다.</p>");
+            }
+        }
+    });// 1번 끝
+    
+</script>
 </head>
 <body>
   <!-- 헤더 부분 -->
@@ -23,7 +104,8 @@
         <li>브랜드 소개</li>
       </ul>
       <span>
-        <button type="button" class="ag_my">로그인/회원가입</button>
+        <button type="button" class="ag_my"><a href="/member/login/">로그인/회원가입</a></button>
+        <button type="button" class="ag_my"><a href="/member/logout/">로그아웃</a></button>
       </span>
     </div>
     <hr>
@@ -32,97 +114,111 @@
   <main>
     <form action="#" name="mapping" method="post">
       {% csrf_token %}
+      <button type="button" id="gps_s"></button>
       <input type="search" id="list_search" placeholder="검색어를 입력해주세요." >
       <button id="seBtn">검색</button>
+
+      <!-- 위치 모달창 -->
+      <div class="modal">
+        <div class="modal_body">
+            <h2>지역 변경</h2>
+            <hr>
+            <input type="text" name="chg" id="chg">
+            <button type="button" id="chgBtn">검색</button><br>
+            <button type="button" class="now">현재 내 위치 사용하기</button>
+            <p>추천</p>
+            <ul>
+              <li><a>서울특별시 강남구</a></li><br>
+              <li><a>서울특별시 송파구</a></li><br>
+              <li><a>서울특별시 강서구</a></li><br>
+              <li><a>경기도 부천시</a></li><br>
+              <li><a>경기도 수원시</a></li><br>
+              <li><a>인천광역시 서구</a></li><br>
+              <li><a>경기도 남양주시</a></li><br>
+            </ul>
+            <br>
+            <button type="button" id="closeBtn">닫기</button>
+        </div>
+    </div>
     </form>
     <div class="here">
       <div class="sub_navloc">HOME&nbsp;&nbsp; <strong><i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시판</strong></div>
-      <h2>서울특별시 강남구</h2>
+      <div id="gps">서울특별시 강남구</div>
     </div>
     <div class="board">
       <!-- 카테고리 -->
       <div class="b_category">
         <ul>
           <li><a>인기글 <img src="/static/images/heart.png" id="heart"></a></li><br>
-          <li><a>전체</a></li><br>
-          <li><a>추천맛집</a></li><br>
-          <li><a>감성카페</a></li><br>
-          <li><a>취미</a></li><br>
-          <li><a>웨이팅</a></li><br>
-          <li><a>실시간공유</a></li><br>
-          <li><a>생활/편의</a></li><br>
-          <li><a>교통</a></li><br>
-          <li><a>풍경</a></li><br>
-          <li><a>사건사고</a></li><br>
-          <li><a>기타</a></li><br>
+          <li><a href="/board/nboard/?bselect=전체">전체</a></li><br>
+          <li><a href="/board/nboard/?bselect=추천맛집">추천맛집</a></li><br>
+          <li><a href="/board/nboard/?bselect=감성카페">감성카페</a></li><br>
+          <li><a href="/board/nboard/?bselect=취미">취미</a></li><br>
+          <li><a href="/board/nboard/?bselect=웨이팅">웨이팅</a></li><br>
+          <li><a href="/board/nboard/?bselect=실시간공유">실시간공유</a></li><br>
+          <li><a href="/board/nboard/?bselect=생활/편의">생활/편의</a></li><br>
+          <li><a href="/board/nboard/?bselect=교통">교통</a></li><br>
+          <li><a href="/board/nboard/?bselect=풍경">풍경</a></li><br>
+          <li><a href="/board/nboard/?bselect=사건사고">사건사고</a></li><br>
+          <li><a href="/board/nboard/?bselect=기타">기타</a></li><br>
         </ul>
       </div>
       <!-- 게시판 -->
       <div class="nlist">
-        <ul>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-          <li>
-            <h3>장미공원 부근 길냥이 보신 분 ㅠ</h3>
-            <p>건물 주차장에서 태어나면서부터 줄곳 자란아이입니다 갑자기 없어져서 너무 걱정됩니다 보신분 있으시...</p>
-            <span>역삼1동  분실/실종  5분전</span><br>
-            <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span>
-          </li>
-        </ul>
+        {% if blist %}
+          {% for board in blist %}
+          <ul>
+            <a><li>
+              <h3>{{board.btitle}}</h3>
+              <p>{{board.bcontent}}</p>
+              <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
+              <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span><br>
+                {% if board.bfile %}
+                <img id="viewimg" src="{{board.bfile.url}}">
+                {% else %}
+                {% endif %}
+            </li></a>
+          </ul>
+          {% endfor %}
+          {% else %}
+          <ul>
+            <li style="font-size: 20px">게시글이 없습니다. 첫 게시글을 작성해주세요!! 🤩</li>
+          </ul>
+          {% endif %}
       </div>
+      <!-- 로그인한 사람만 글쓰기 가능 -->
+      {%if request.session.session_id%}
       <a id="add" href="/board/bwrite/"><img src="/static/images/add.png"></a>
+      {% else %}
+      {% endif %}
+    </div>
+    <div class="bottom">
+      <ul class="page-num">
+        <!-- 이전페이지 확인 -->
+        {% if blist.has_previous %}
+          <a class="plz" href="/board/nboard/?npage=1"><li class="first"></li></a>
+          <a class="plz" href="/board/nboard/?npage={{blist.previous_page_number}}"><li class="prev"></li></a>
+        {% else %}
+          <a class="plz"><li class="first"></li></a>
+          <a class="plz"><li class="prev"></li></a>
+        {% endif %}
+        <!-- 순차페이지 넘버링 -->
+        {% for page in blist.paginator.page_range %}
+        {% if page != npage %}
+          <a href="/board/nboard/?npage={{page}}"><li class="num"><div>{{page}}</div></li></a>
+        {% else %}
+          <li class="num on"><div>{{page}}</div></li>
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 확인 -->
+        {% if blist.has_next %}
+          <a class="plz" href="/board/nboard/?npage={{blist.next_page_number}}"><li class="next"></li></a>
+          <a class="plz" href="/board/nboard/?npage={{blist.paginator.num_pages}}"><li class="last"></li></a>
+        {% else %}
+          <a class="plz"><li class="next"></li></a>
+          <a class="plz"><li class="last"></li></a>
+        {% endif %}
+      </ul>
     </div>
   </main>
   <!-- 하단 부분 -->
@@ -163,5 +259,21 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // 2. 모달창 클릭
+    const modal = document.querySelector('.modal');
+    const btnOpenModal=document.querySelector('#gps_s');
+    const btnCloseModal=document.querySelector('#closeBtn');
+
+    btnOpenModal.addEventListener("click", ()=>{
+        modal.style.display="flex";
+        $("body").addClass("modal-open");
+    });
+    btnCloseModal.addEventListener("click", ()=>{
+        modal.style.display="none";
+        $("body").removeClass("modal-open");
+    });//2번 끝
+  </script>
 </body>
 </html>
