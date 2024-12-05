@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" type="text/css" href="{% static '/css/bwrite.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/bmodify.css' %}">
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>ANG-GGO</title>
   <script>
@@ -73,22 +73,15 @@
                     }
                 }
             }
-
-            // 가장 가까운 위치 출력
-            if (nearestLocation) {
-                $("#bgps").val(nearestLocation);
-            } else {
-                $("#blocation").html("<p>근처에 데이터가 없습니다.</p>");
-            }
         }
     });// 1번 끝
 
   // 2. 글쓰기 유효성 검사
-  if("{{wmsg}}"=='1'){
-    alert('게시글이 작성되었습니다.');
-    location.href='/board/nboard/'
+  if ("{{umsg}}" != ""){
+    alert("게시글이 수정되었습니다.")
+    location.href="/board/bbview/{{umsg}}";
   }
-
+  
   $(function(){
       $('.write').click(function(){
           if($('#btitle').val().length<2){
@@ -106,7 +99,7 @@
               $('#bgps').focus()
               return false();
           }
-          writeFrm.submit();
+          modifyFrm.submit();
       });
   });// 2번 끝
 </script>
@@ -136,10 +129,10 @@
 
   <main>
     <div class="here">
-      <div class="sub_navloc">HOME&nbsp;&nbsp; <i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시판&nbsp;&nbsp; <strong><i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시글 작성</strong></div>
+      <div class="sub_navloc">HOME&nbsp;&nbsp; <i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시판&nbsp;&nbsp; <strong><i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시글 수정</strong></div>
     </div>
-    <div class="bwrite">
-      <form action="" name="writeFrm" id="writeFrm" method="post" enctype="multipart/form-data">
+    <div class="bmodify">
+      <form action="" name="modifyFrm" id="modifyFrm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
           <colgroup>
@@ -148,42 +141,43 @@
           </colgroup>
           <tr>
             <th>작성자</th>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;{{request.session.session_nickname}}</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;{{board.member.nickname}}</td>
           </tr>
           <tr>
             <th class="star">제목</th>
-            <td><input type="text" name="btitle" id="btitle" placeholder="제목을 입력해주세요."></td>
+            <td><input type="text" name="btitle" id="btitle" value="{{board.btitle}}"></td>
           </tr>
           <tr>
             <th class="star">위치</th>
-            <td id="blocation"><input type="text" name="bgps" id="bgps" value=""></td>
+            <td id="blocation"><input type="text" name="bgps" id="bgps" value="{{board.bgps}}"></td>
           </tr>
           <tr>
             <th class="star">커뮤니티 선택</th>
             <td>
               <select name="bselect" id="community">
-                <option value="추천맛집" id="yum">추천맛집😋</option>
-                <option value="감성카페" id="cafe">감성카페☕</option>
-                <option value="취미" id="hobby">취미🎮</option>
-                <option value="웨이팅" id="waiting">웨이팅👥</option>
-                <option value="실시간공유" id="live">실시간공유🗫</option>
-                <option value="생활/편의" id="life">생활/편의🧼</option>
-                <option value="교통" id="traffic">교통🚗</option>
-                <option value="풍경" id="scene">풍경🌴</option>
-                <option value="사건사고" id="accident">사건사고😈</option>
-                <option value="기타" id="etc">기타🔍</option>
+                <option value="추천맛집" id="yum" {% if '추천맛집' in board.bselect %}selected{% endif %}>추천맛집😋</option>
+                <option value="감성카페" id="cafe" {% if '감성카페' in board.bselect %}selected{% endif %}>감성카페☕</option>
+                <option value="취미" id="hobby" {% if '취미' in board.bselect %}selected{% endif %}>취미🎮</option>
+                <option value="웨이팅" id="waiting" {% if '웨이팅' in board.bselect %}selected{% endif %}>웨이팅👥</option>
+                <option value="실시간공유" id="live" {% if '실시간공유' in board.bselect %}selected{% endif %}>실시간공유🗫</option>
+                <option value="생활/편의" id="life" {% if '생활/편의' in board.bselect %}selected{% endif %}>생활/편의🧼</option>
+                <option value="교통" id="traffic" {% if '교통' in board.bselect %}selected{% endif %}>교통🚗</option>
+                <option value="풍경" id="scene" {% if '풍경' in board.bselect %}selected{% endif %}>풍경🌴</option>
+                <option value="사건사고" id="accident" {% if '사건사고' in board.bselect %}selected{% endif %}>사건사고😈</option>
+                <option value="기타" id="etc" {% if '기타' in board.bselect %}selected{% endif %}>기타🔍</option>
               </select>
             </td>
           </tr>
           <tr>
             <th class="star">내용</th>
             <td>
-              <textarea name="bcontent" id="bcontent" cols="50" rows="10" placeholder="내용을 입력해주세요."></textarea>
+              <textarea name="bcontent" id="bcontent" cols="50" rows="10">{{board.bcontent}}</textarea>
             </td>
           </tr>
           <tr>
             <th>이미지 표시</th>
             <td>
+              &nbsp;&nbsp;&nbsp;&nbsp;{{board.bfile}}
               <input type="file" onchange="readURL(this);" name="bfile" id="file">
             </td>
           </tr>

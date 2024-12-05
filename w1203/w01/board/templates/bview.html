@@ -1,8 +1,34 @@
 {% extends "base.html" %}
 {% load static %}
 {% block container-block %}
-	<!-- //GNB -->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- //GNB -->
+	<script>
+		$(function(){
+			$("#likeBtn").click(function(){
+				const csrfToken = $("meta[name='csrf-token']").attr("content");
+				let bno = "{{board.bno}}"
+				$.ajax({
+					headers:{"X-CSRFToken":csrfToken},
+					url:"/board/likes/",
+					type:"post",
+					data:{"bno":bno},
+					success:function(data){
+						console.log("결과 data.result : "+data.result)
+						if(data.result == "remove"){
+							$("#likecount").text(data.count)
+						}else{
+							$("#likecount").text(data.count)
+						}
+					},
+					error:function(){
+						alert("실패")
+					}
+				});//ajax
+			});
+		});
+	</script>
 	<!-- container -->
 	<div id="container">
 
@@ -34,7 +60,16 @@
 						<div class="viewHead">
 							<div class="subject">
 								<ul>
-									<li>{{board.btitle}}</li>
+									<li>
+										{{board.btitle}}
+										<button type="button" id="likeBtn"><span id="liketxt">
+											{% if result == "0" %}
+											<i class="fa-regular fa-thumbs-up"></i>
+											{% elif result == "1" %}
+											<i class="fa-solid fa-thumbs-up"></i>
+											{% endif %}
+										</span> <span id="likecount">{{count}}</span></button>
+									</li>
 								</ul>
 							</div>
 							<div class="day">

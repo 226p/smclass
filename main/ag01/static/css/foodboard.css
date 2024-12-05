@@ -135,6 +135,117 @@ position: relative; top: 1200px;}
 }
 
 
+/* 게시글 상세보기 */
+.nlistview{width: 80%; height: 1500px; display: inline-block; box-sizing: border-box;
+  position: absolute; top: 50px; box-sizing: border-box;}
+.nlistview>ul{width: 100%; height: 150px; margin-bottom: 20px; text-align: left;}
+.nlistview>ul>li{padding-left: 5%; margin-bottom: 10px;}
+.nlistview>ul>li:nth-child(1){font-size: 20px;}
+.nlistview>ul>li:nth-child(3){font-size: 30px;}
+.nlistview>ul>li:nth-child(5){font-size: 20px; color: #767676;}
+.nlistview>ul>li:nth-child(7){font-size: 40px; font-weight: 700;}
+.nlistview>ul>li:nth-child(8){font-size: 40px; font-weight: 700;}
+.nlistview>ul>li:nth-child(9){font-size: 30px; margin-bottom: 50px; position: relative;}
+.nlistview>ul>li:nth-child(10){font-size: 30px; margin-bottom: 50px; position: relative;}
+#bhit{font-size: 20px; margin-top: 20px;}
+#tag{width: 150px; height: 40px; margin-bottom: 10px; font-weight: 600; background-color: hsl(0, 100%, 90%); text-align: center; line-height: 40px; border-radius: 50px;}
+
+.bwrite{width: 100%; height: 1000px; position: relative; top: 50px; box-sizing: border-box;}
+
+table{width: 80%; height: 800px; border: 1px solid red; margin: 0 auto; font-size: 20px;}
+#bcontent {
+  padding-left: 20px;
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: 20px;
+}
+#community{width: 20%; font-size: 20px; border: none; position: relative; left: 10px; padding-left: 10px;}
+.button-wrapper{width: 90%; height: 50px; text-align: right; margin: 10px auto;}
+.button-wrapper>button{width: 80px; height: 40px; font-size: 15px; border:none;
+  box-shadow: none; cursor: pointer; margin-right: 10px;}
+
+#fileimg{width: 1300px; height: 500px; margin: auto; display: block; position: relative;}
+
+/* 이전글, 다음글 */
+.tbody{width: 1400px; height: 150px; background-color: #ffcece; text-align: left; margin-top: 20px; margin-bottom: 20px; margin-left: 60px; border-radius: 50px;}
+.tbody li{width: 1200px; height: 70px; margin: 0 auto;}
+.tbody h4{font-size: 25px; float: left; position: relative; top: -30px; color: white;}
+.tbody p{font-size: 25px; float: left; position: relative; top: 20px;}
+
+
+/* 좋아요, 말풍선 */
+#likeBtn{width: 50px; height: 50px; font-size: 50px; margin-left: 60px;}
+#replycount{width: 100px; height: 50px; font-size: 50px; margin-left: 30px;}
+
+/* 댓글창 */
+.comments-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 20px auto;
+  margin-top: 30px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section h3 {
+  margin-bottom: 15px;
+  font-size: 20px; 
+  color: #333;
+  border-bottom: 2px solid #ff9ca3; 
+  padding-bottom: 5px;
+}
+
+.comment-form {
+  margin-bottom: 20px;
+}
+
+.comment-form textarea {
+  width: 98.5%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  resize: none;
+  font-size: 20px; 
+  color: #555;
+}
+
+.comment-form button {
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #ff9ca3; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px; 
+}
+
+.comment-form button:hover {
+  background-color: #ff7681;
+}
+
+.comments-list {
+  margin-top: 10px;
+}
+.comments-list>ul{display: block; text-align: left; margin: 0 auto; margin-bottom: 30px;}
+.comments-list .name{height: auto; font-size: 25px; font-weight: 600;}
+.comments-list .name>span{font-size: 20px; font-weight: 400; color: #666;}
+.comments-list .txt{width: 60%; height: auto; display: block; font-size: 20px; border-radius: 10px; text-align: left; padding-left: 20px;}
+.comments-list .btn{display: inline-block;}
+.comments-list .btn>a{
+  color: white;
+  width: 50px; 
+  height: 30px; 
+  display: inline-block; 
+  margin-right: 10px; 
+  border-radius: 10px; 
+  line-height: 30px;
+  background-color: #666;
+}
 
 
 /* 모달창 */

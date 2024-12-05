@@ -10,6 +10,7 @@ urlpatterns = [
     path('map/', include('map.urls')),
     path('board/', include('board.urls')),
     path('member/', include('member.urls')),
+    path('comment/', include('comment.urls')),
 ]
 
 

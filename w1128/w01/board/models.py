@@ -7,6 +7,7 @@ class Board(models.Model):
   member = models.ForeignKey(Member,on_delete=models.DO_NOTHING, null=True)
   btitle = models.CharField(max_length=1000)
   bcontent = models.TextField()
+  like_member = models.ManyToManyField(Member,default='',related_name='like_member')
   # 계층형 게시판
   bgroup = models.IntegerField(null=True)
   bstep = models.IntegerField(default=0)

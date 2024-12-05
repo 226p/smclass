@@ -21,6 +21,7 @@ class Board(models.Model):
   bcontent = models.TextField()
   bgps = models.CharField(max_length=1000)
   bselect = models.CharField(max_length=500,choices=CHOICES)
+  like_member = models.ManyToManyField(Member,default='',related_name='like_member')
   # 계층형 게시판
   bgroup = models.IntegerField(null=True)
   bstep = models.IntegerField(default=0)

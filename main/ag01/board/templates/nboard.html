@@ -88,6 +88,25 @@
         }
     });// 1번 끝
     
+    // 2. 비로그인 시 사용 제한
+    $(function() {
+      $(document).on("click","#no_mem",function(){
+        if("{{request.session.session_id}}" == ""){
+          alert("로그인을 해야 게시글 상세보기가 가능합니다.")
+          location.href="/member/login/"
+          return;
+        }
+      });
+    });// 2번 끝
+
+    // 3. 게시글 삭제
+    if ("{{dmsg}}" != ""){
+      if(confirm("{{dmsg}}번 게시글을 삭제하겠습니까?")){
+        location.href="/board/nboard/"
+      }else{
+        location.href="/board/nboard/"
+      }
+    }// 3번 끝
 </script>
 </head>
 <body>
@@ -114,7 +133,7 @@
   <main>
     <form action="#" name="mapping" method="post">
       {% csrf_token %}
-      <button type="button" id="gps_s"></button>
+      <button type="button" id="gps_s">강남구</button>
       <input type="search" id="list_search" placeholder="검색어를 입력해주세요." >
       <button id="seBtn">검색</button>
 
@@ -149,7 +168,7 @@
       <!-- 카테고리 -->
       <div class="b_category">
         <ul>
-          <li><a>인기글 <img src="/static/images/heart.png" id="heart"></a></li><br>
+          <li><a href="/board/nboard/?bselect=인기글">인기글 <img src="/static/images/heart.png" id="heart"></a></li><br>
           <li><a href="/board/nboard/?bselect=전체">전체</a></li><br>
           <li><a href="/board/nboard/?bselect=추천맛집">추천맛집</a></li><br>
           <li><a href="/board/nboard/?bselect=감성카페">감성카페</a></li><br>
@@ -168,16 +187,33 @@
         {% if blist %}
           {% for board in blist %}
           <ul>
-            <a><li>
-              <h3>{{board.btitle}}</h3>
-              <p>{{board.bcontent}}</p>
-              <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
-              <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;1&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;2 </span><br>
-                {% if board.bfile %}
-                <img id="viewimg" src="{{board.bfile.url}}">
-                {% else %}
-                {% endif %}
-            </li></a>
+            {% if request.session.session_id%}
+              <a href="/board/bbview/{{board.bno}}/"><li>
+                <h3>{{board.btitle}}</h3>
+                <p>{{board.bcontent}}</p>
+                <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
+                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{board.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;{{comment_counts.board.bno}}</span><br>
+                  {% if board.bfile %}
+                  <img id="viewimg" src="{{board.bfile.url}}">
+                  {% else %}
+                  {% endif %}
+              </li></a>
+            {% else %}
+              <a><li id="no_mem">
+                <h3>{{board.btitle}}</h3>
+                <p>{{board.bcontent}}</p>
+                <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
+                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{board.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>
+                  {% for c in comment_counts %}
+                  &nbsp;{{ c }}
+                  {% endfor %}
+                </span><br>
+                  {% if board.bfile %}
+                  <img id="viewimg" src="{{board.bfile.url}}">
+                  {% else %}
+                  {% endif %}
+              </li></a>
+            {% endif %}
           </ul>
           {% endfor %}
           {% else %}
