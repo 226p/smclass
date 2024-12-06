@@ -10,88 +10,128 @@
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <title>ANG-GGO</title>
   <script>
-    // 1. 사이트 GPS 출력
-    $(function() {
+    // 1. 모달창 위치정보 수집 동의
+    let userLat = null;
+    let userLon = null;
+    let nearestLocation = null;
+    let nearestLocation_s = null;
 
-    
+    // 위치 정보를 업데이트하는 함수
+    function updateLocation(lat, lon) {
+      userLat = lat;
+      userLon = lon;
 
-      const radius = 6371; // 지구 반지름 (단위: km)
+      // 위치 데이터를 sessionStorage에 저장
+      sessionStorage.setItem("userLat", lat);
+      sessionStorage.setItem("userLon", lon);
 
-      // 두 지점 간의 거리 계산 함수 (Haversine 공식)
-      function getDistance(lat1, lon1, lat2, lon2) {
-          const toRad = (value) => (value * Math.PI) / 180;
-          const dLat = toRad(lat2 - lat1);
-          const dLon = toRad(lon2 - lon1);
-          const a = Math.sin(dLat / 2) ** 2 +
-                    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-                    Math.sin(dLon / 2) ** 2;
-          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          return radius * c; // 단위: km
+      // CSV 데이터와 비교하여 가장 가까운 위치 업데이트
+      $.ajax({
+        url: '/static/좌표데이터.csv',
+        dataType: 'text',
+        success: function (data) {
+          processCSVData(data, lat, lon);
+        },
+        error: function () {
+          alert('CSV 파일을 읽는 데 실패했습니다.');
+        },
+      });
+    }
+
+    // 가장 가까운 위치를 찾고 DOM 업데이트
+    function processCSVData(data, lat, lon) {
+      const lines = data.split("\n");
+      let minDistance = Infinity;
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line) {
+          const columns = line.split(",");
+          const 시도 = columns[0];
+          const 시군구 = columns[1];
+          const 위도 = parseFloat(columns[4]);
+          const 경도 = parseFloat(columns[5]);
+
+          const distance = getDistance(lat, lon, 위도, 경도);
+          if (distance < minDistance) {
+            minDistance = distance;
+            nearestLocation = `${시도} ${시군구}`;
+            nearestLocation_s = `${시군구}`;
+          }
+        }
       }
 
-      // Geolocation API로 현재 위치를 가져옴
+      // DOM 업데이트
+      if (nearestLocation) $("#gps").html(`<h2>${nearestLocation}</h2>`);
+      if (nearestLocation_s) $("#gps_s").html(`<h2>${nearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
+
+      // 위치 데이터를 sessionStorage에 저장
+      sessionStorage.setItem("nearestLocation", nearestLocation);
+      sessionStorage.setItem("nearestLocation_s", nearestLocation_s);
+    }
+
+    // Haversine 공식으로 거리 계산
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const radius = 6371; // 지구 반지름 (km)
+      const toRad = (value) => (value * Math.PI) / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return radius * c;
+    }
+
+    // 위치 권한 요청 및 업데이트
+    function requestLocationPermission() {
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos) {
-              const userLat = pos.coords.latitude;
-              const userLon = pos.coords.longitude;
-
-              $('#latitude').html(userLat); // 위도
-              $('#longitude').html(userLon); // 경도
-
-              // CSV 파일 읽기
-              $.ajax({
-                  url: '/static/좌표데이터.csv', // static 폴더에 있는 파일
-                  dataType: 'text',
-                  success: function(data) {
-                      processCSVData(data, userLat, userLon);
-                  },
-                  error: function() {
-                      alert('CSV 파일을 읽는 데 실패했습니다.');
-                  }
-              });
-          });
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            updateLocation(lat, lon);
+            alert("위치 권한이 허용되었습니다.");
+          },
+          (error) => {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                alert("위치 권한이 거부되었습니다.");
+                break;
+              case error.POSITION_UNAVAILABLE:
+                alert("위치 정보를 사용할 수 없습니다.");
+                break;
+              case error.TIMEOUT:
+                alert("위치 요청이 시간 초과되었습니다.");
+                break;
+              default:
+                alert("알 수 없는 오류가 발생했습니다.");
+            }
+          }
+        );
       } else {
-          alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
+        alert("이 브라우저는 위치 서비스를 지원하지 않습니다.");
       }
+    }
 
-      // CSV 데이터를 처리하는 함수
-      function processCSVData(data, userLat, userLon) {
-          const lines = data.split("\n"); // 줄 단위로 나눔
-          let nearestLocation = null; // 가장 가까운 위치
-          let minDistance = Infinity; // 최소 거리
+    // 페이지 로드 시 sessionStorage에서 데이터 복원
+    $(document).ready(() => {
+      const storedLat = sessionStorage.getItem("userLat");
+      const storedLon = sessionStorage.getItem("userLon");
+      const storedNearestLocation = sessionStorage.getItem("nearestLocation");
+      const storedNearestLocation_s = sessionStorage.getItem("nearestLocation_s");
 
-          for (let i = 1; i < lines.length; i++) { // 첫 번째 줄은 헤더
-              const line = lines[i].trim();
-              if (line) {
-                  const columns = line.split(",");
-                  const 시도 = columns[0];
-                  const 시군구 = columns[1];
-                  const 위도 = parseFloat(columns[4]);
-                  const 경도 = parseFloat(columns[5]);
+      if (storedLat && storedLon) {
+        userLat = parseFloat(storedLat);
+        userLon = parseFloat(storedLon);
+        nearestLocation = storedNearestLocation;
+        nearestLocation_s = storedNearestLocation_s;
 
-                  // 사용자 위치와의 거리 계산
-                  const distance = getDistance(userLat, userLon, 위도, 경도);
-                  if (distance < minDistance) {
-                      minDistance = distance;
-                      nearestLocation = `${시도} ${시군구}`;
-                      nearestLocation_s = `${시군구}`;
-                  }
-              }
-          }
-
-          // 가장 가까운 위치 출력
-          if (nearestLocation) {
-              $("#gps").html(`<h2>${nearestLocation}</h2>`);
-          } else {pass}
-          // 가장 가까운 위치 출력
-          if (nearestLocation_s) {
-              $("#gps_s").html(`<h2>${nearestLocation_s}  <i class="fa-solid fa-location-dot"></i></h2>`);
-          } else {
-              $("#gps_s").html("<p>근처에 데이터가 없습니다.</p>");
-          }
+        // DOM 복원
+        if (nearestLocation) $("#gps").html(`<h2>${nearestLocation}</h2>`);
+        if (nearestLocation_s) $("#gps_s").html(`<h2>${nearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
       }
-  });// 1번 끝
-
+    });// 1번 끝
 
   
   // 2. 좋아요 기능
@@ -125,43 +165,50 @@
 
   // 3. 댓글등록(입력)
   $(document).on("click", ".replyBtn", function () {
-  const ccontent = $(".replyType").val();
-  const bno = "{{ board.bno }}";
-  const csrfToken = $("meta[name='csrf_token']").attr("content");
-
-  $.ajax({
-    headers: { "X-CSRFToken": csrfToken },
-    url: "/comment/cwrite/",
-    type: "post",
-    data: { ccontent: ccontent, bno: bno },
-    success: function (data) {
-      if (data.result === "success") {
-        alert("하단댓글이 등록되었습니다.");
-        var datahtml = ""
-          datahtml += `<ul id="${data.comment[0].cno}">`
-          datahtml += `<li class="name">{{request.session.session_nickname}}<span>[ ${data.comment[0].cdate} ]</span></li>`
-          datahtml += `<li class="txt">${data.comment[0].ccontent}</li>`
-          datahtml += `<li class="btn">`
-          datahtml += `<a class="uBtn rebtn">수정</a>&nbsp`
-          datahtml += `<a class="dBtn rebtn">삭제</a>`
-          datahtml += `</li>`
-          datahtml += `</ul>`
-          console.log(datahtml)
-          $(".comments-list").prepend(datahtml)
-          let cnt = $("#cnt").text()
-          console.log("개수 : "+(Number(cnt)+1))
-          $("#cnt").text(Number(cnt)+1)
-      } else {
-        alert("등록이 되지 않았습니다. 다시 입력하세요.");
-      }
-    },
-    error: function () {
-      alert("실패");
-    },
-  });
-
-  $(".replyType").val("");
-});// 3번 끝
+    if($('.replyType').val().length<2){
+      alert('댓글은 두 자리 이상 입력해야 합니다.');
+      $('.replyType').focus()
+      return false();
+    }
+    const ccontent = $(".replyType").val();
+    const bno = "{{ board.bno }}";
+    const csrfToken = $("meta[name='csrf_token']").attr("content");
+  
+    $.ajax({
+      headers: { "X-CSRFToken": csrfToken },
+      url: "/comment/cwrite/",
+      type: "post",
+      data: { ccontent: ccontent, bno: bno },
+      success: function (data) {
+        if (data.result === "success") {
+          alert("하단댓글이 등록되었습니다.");
+          
+          var datahtml = ""
+            datahtml += `<ul id="${data.comment[0].cno}">`
+            datahtml += `<li class="name">{{request.session.session_nickname}}<span>[ ${data.comment[0].cdate} ]</span></li>`
+            datahtml += `<li class="txt">${data.comment[0].ccontent}</li>`
+            datahtml += `<li class="btn">`
+            datahtml += `<a class="uBtn rebtn">수정</a>&nbsp`
+            datahtml += `<a class="dBtn rebtn">삭제</a>`
+            datahtml += `</li>`
+            datahtml += `</ul>`
+            console.log(datahtml)
+            $(".comments-list").prepend(datahtml)
+            let cnt = $("#cnt").text()
+            console.log("개수 : "+(Number(cnt)+1))
+            $("#cnt").text(Number(cnt)+1)
+            location.reload();
+        } else {
+          alert("등록이 되지 않았습니다. 다시 입력하세요.");
+        }
+      },
+      error: function () {
+        alert("실패");
+      },
+    });
+  
+    $(".replyType").val("");
+  });// 3번 끝
 
 // 4. 댓글삭제 - 동적클릭진행
 $(document).on("click",".dBtn",function(){
@@ -193,6 +240,109 @@ $(document).on("click",".dBtn",function(){
   }//confirm
 });// 4번 끝
 
+// 5. 댓글수정
+$(document).on("click",'.uBtn',function(){
+  let cno = $(this).closest("ul").attr("id");
+  let id = "{{request.session.session_nickname}}";
+  let cdate = $(this).closest("ul").find(".name span").text();
+  let ccontent = $(this).closest("ul").find(".txt").text();
+
+  var datahtml = ""
+    datahtml += `<li class="name">${id}<span>&nbsp;${cdate}&nbsp;</span></li>`
+    datahtml += `<li class="btn">`
+    datahtml += `<a class="sBtn rebtn">완료</a>&nbsp`
+    datahtml += `<a class="cBtn rebtn">취소</a>`
+    datahtml += `</li>`
+    datahtml += `<li class="txt"><textarea class="replyType" style="width: 1000px; height: 200px; font-size: 20px; margin-top: 10px;">${ccontent}</textarea></li>`
+  $("#"+cno).html(datahtml);
+});// 5번 끝
+
+// 6. 댓글수정(취소)
+$(document).on("click",'.cBtn',function(){
+  location.reload();
+});// 6번 끝
+
+// 7. 댓글수정(저장)
+$(document).on("click",'.sBtn',function(){
+  let cno = $(this).closest("ul").attr("id");
+  let ccontent = $(this).closest("ul").find(".txt textarea").val();
+  const csrfToken = $("meta[name='csrf_token']").attr("content");
+  //ajax
+  $.ajax({
+    headers:{"X-CSRFToken":csrfToken},
+    url:"/comment/cupdate/",
+    type:"post",
+    data:{"cno":cno,"ccontent":ccontent},
+    success:function(data){
+      console.log("결과 data.result : "+data.result)
+      console.log("결과 data.comment[0].cno : "+data.comment[0].cno)
+      console.log("결과 data.comment[0].ccontent : "+data.comment[0].ccontent)
+
+      if (data.result == "success"){
+        alert("하단댓글이 수정되었습니다.")
+        var datahtml = ""
+
+        datahtml += `<li class="name">{{request.session.session_nickname}}<span>[ ${data.comment[0].cdate} ]</span></li>`
+        datahtml += `<li class="btn">`
+        datahtml += `<a class="uBtn rebtn">수정</a>&nbsp`
+        datahtml += `<a class="dBtn rebtn">삭제</a>`
+        datahtml += `</li>`
+        datahtml += `<li class="txt">${data.comment[0].ccontent}</li>`
+        $("#"+cno).html(datahtml);
+        location.reload();
+      }else{
+        alert("등록이 되지 않았습니다. 다시 입력하세요.")
+      }
+    },
+    error:function(){
+      alert("실패")
+    }
+  })//ajax
+});//7번 끝
+
+// 8. 대댓글 기능
+$(document).on("click", ".rBtn", function () {
+  const parentCno = $(this).closest("ul").attr("id"); // 부모 댓글 ID
+  if (!$("#reply-box-" + parentCno).length) {
+      $(this).closest("ul").append(`
+          <div id="reply-box-${parentCno}" class="reply-box">
+              <textarea class="replyType" placeholder="답글을 작성하세요."></textarea>
+              <button class="r_Btn" data-parent-cno="${parentCno}">답글 작성</button>
+          </div>
+      `);
+  }
+});
+$(document).on("click", ".r_Btn", function () {
+  const ccontent = $(this).siblings(".replyType").val();
+  const bno = "{{board.bno}}";
+  const parentCno = $(this).closest("ul").attr("id");
+  const csrfToken = $("meta[name='csrf_token']").attr("content");
+
+  $.ajax({
+      headers: { "X-CSRFToken": csrfToken },
+      url: "/comment/reply/",
+      type: "post",
+      data: { ccontent: ccontent, bno: bno, cno: parentCno },
+      success: function (data) {
+          if (data.result === "success") {
+              alert("댓글이 등록되었습니다.");
+              location.reload(); // 페이지 새로고침
+          } else {
+              alert("등록에 실패했습니다.");
+          }
+      },
+      error: function () {
+          alert("실패");
+      },
+  });
+  $("#chg").val("")
+});
+
+if ("{{rmsg}}" != ""){
+  alert("답글이 작성되었습니다.")
+  location.href="/board/bbview/{{board.bno}}/";
+}
+// 8번 끝
 </script>
 </head>
 <body>
@@ -219,7 +369,7 @@ $(document).on("click",".dBtn",function(){
   <main>
     <form action="#" name="mapping" method="post">
       {% csrf_token %}
-      <button type="button" id="gps_s">강남구</button>
+      <button type="button" id="gps_s"><h2>강남구  <i class="fa-solid fa-location-dot"></i></h2></button>
       <input type="search" id="list_search" placeholder="검색어를 입력해주세요." >
       <button id="seBtn">검색</button>
 
@@ -350,15 +500,19 @@ $(document).on("click",".dBtn",function(){
 						  {% for comment in clist %}
                 <ul id="{{comment.cno}}">
                   <div class="comment">
-                    <li class="name">{{comment.member.nickname}} <span>[ {{comment.cdate|date:'Y-m-d  H:m:i'}}]</span></li>
-                    {% if request.session.session_id == comment.member.id  %}
+                    <li class="name">{{comment.member.nickname}} <span>[ {{comment.cdate|date:'Y-m-d  H:i:s'}}]</span></li>
                     <span>
+                    {% if request.session.session_id == comment.member.id  %}
                       <li class="btn">
                         <a class="uBtn rebtn">수정</a>
                         <a class="dBtn rebtn">삭제</a>
                       </li>
-                    </span>
+                    {% else %}
+                      <li class="btn">
+                        <a class="rBtn rebtn">답글</a>
+                      </li>
                     {% endif %}
+                    </span>
                     <li class="txt">{{comment.ccontent}}</li>
                   </div>
                 </ul>

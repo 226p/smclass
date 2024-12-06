@@ -9,7 +9,13 @@ class Comment(models.Model):
   member = models.ForeignKey(Member,on_delete=models.DO_NOTHING)
   ccontent = models.TextField(blank=True)
   cdate = models.DateTimeField(auto_now=True)
+    
+  # 계층형 댓글
+  cgroup = models.IntegerField(default=0)
+  cstep = models.IntegerField(default=0)
+  cindent = models.IntegerField(default=0)
   
   def __str__(self):
     return f"{self.cno},{self.ccontent},{self.cdate}"
+  
 

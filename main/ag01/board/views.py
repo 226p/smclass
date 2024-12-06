@@ -1,38 +1,81 @@
 from django.shortcuts import render
 from board.models import Board
 from member.models import Member
-from django.db.models import Q
-from django.db.models import F
+from django.db.models import Q,F
+from django.db.models import Count
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.http import JsonResponse,HttpResponse 
 from comment.models import Comment
 
-def nboard(request):    # 1. 게시판리스트 호출(bselect태그에 따른 호출) / 2. 게시판 하단 넘버링
-  if request.method == 'GET':
-    bselect = request.GET.get("bselect","전체")
-    print("bselect : ",bselect)
-    if bselect == "전체":
-      qs = Board.objects.all().order_by("-bgroup","bstep")
-      print("qs : ",qs)
-    elif bselect == "인기글":
-      qs = Board.objects.all().order_by("-like_member")
-      print("qs : ",qs)
+def nboard(request):  
+    if request.method == 'GET':
+        # bselect 파라미터 처리
+        bselect = request.GET.get("bselect", "전체")
+        print("bselect : ", bselect)
+
+        # 기본 QuerySet 정의
+        qs = Board.objects.annotate(comment_count=Count('comment', distinct=True))
+
+        # bgps 파라미터 처리
+        bgps = request.GET.get('bgps', '')  # bgps 파라미터를 가져옵니다
+
+        if bselect == "전체":
+            if bgps:  # bgps 값이 있으면 해당 값으로 필터링
+                qs = qs.filter(bgps__contains=bgps).order_by("-bgroup", "bstep", '-comment_count')
+            else:  # bgps 값이 없으면 전체 게시글을 가져옵니다
+                qs = qs.order_by('-bgroup', 'bstep', '-comment_count')
+        elif bselect == "인기글":
+            qs = qs.order_by("-like_member", '-comment_count')
+        else:
+            qs = qs.filter(bselect=bselect).order_by("-bgroup", "bstep", '-comment_count')
+
+        if qs.exists():  # 게시글이 있을 경우
+            print("첫 번째 게시글 댓글 수 : ", qs[0].comment_count)
+        else:  # 게시글이 없을 경우
+            print("게시글이 없습니다.")
+
+        # 페이지 처리
+        npage = int(request.GET.get('npage', 1))
+        print("npage:", npage)
+
+        paginator = Paginator(qs, 10)
+        blist = paginator.get_page(npage)
+
+        # 각 게시글에 해당하는 댓글 수를 계산
+        comment_counts = {board.bno: Comment.objects.filter(board=board).count() for board in blist}
+
+        # 시도, 시군구 파라미터 처리
+        시도 = ''
+        시군구 = ''
+        if bgps:  # bgps 값이 있다면, 시도와 시군구를 분리
+            시도, 시군구 = bgps.split(" ", 1)  # 시도와 시군구를 공백을 기준으로 분리
+
+        # 지역 목록 예시 (필요에 따라 수정)
+        areas = [
+            "서울특별시 강남구", 
+            "서울특별시 송파구", 
+            "경기도 성남시",
+            "서울특별시 강서구",
+            "경기도 부천시",
+            "인천광역시 서구",
+            "경기도 남양주시"
+        ]
+
+        context = {
+            "blist": blist,
+            'npage': npage,
+            'comment_counts': comment_counts,
+            '시도': 시도,  # 시도 정보 템플릿에 전달
+            '시군구': 시군구,  # 시군구 정보 템플릿에 전달
+            'areas': areas,  # 지역 목록
+            'current_bgps': bgps  # 현재 선택된 bgps 값 전달
+        }
+
+        return render(request, 'nboard.html', context)
+
     else:
-      qs = Board.objects.filter(bselect=bselect).order_by("-bgroup","bstep")
-      print("qs : ",qs)
-
-    npage = int(request.GET.get('npage',1))
-    print("npage:",npage)
-    paginator = Paginator(qs,10)
-    blist = paginator.get_page(npage)
-
-    # 각 게시글에 대한 댓글 수를 계산하여 전달
-    comment_counts = {board.bno: Comment.objects.filter(board=board).count() for board in blist}
-    context = {"blist": blist, 'npage': npage, 'comment_counts': comment_counts}
-    return render(request,'nboard.html',context)
-  else:
-    return render(request,'nboard.html')
+        return render(request, 'nboard.html')
 
 def bwrite(request):    # 1. 게시판글작성 호출 / 2. 게시판 글 작성 저장
   if request.method == 'GET':

@@ -84,6 +84,7 @@ h4{margin: 50px; font-size: 25px;}
 .here>div{color: #767676;}
 .here>i{color: black;}
 .here>i, strong{color: black;}
+#gps{font-size: 30px; margin: 10px auto; color: black; font-weight: 600;}
 #gps>h2{font-size: 30px; margin: 10px auto; color: black;}
 
 .b_category{width: 10%; height: 580px; position: relative; top: 50px; margin-left: 50px; display: inline-block; box-sizing: border-box;}
@@ -175,8 +176,8 @@ table{width: 80%; height: 800px; border: 1px solid red; margin: 0 auto; font-siz
 
 
 /* 좋아요, 말풍선 */
-#likeBtn{width: 50px; height: 50px; font-size: 50px; margin-left: 60px;}
-#replycount{width: 100px; height: 50px; font-size: 50px; margin-left: 30px;}
+#likeBtn{width: 200px; height: 50px; font-size: 50px; margin-left: 60px;}
+#replycount{width: 200px; height: 50px; font-size: 50px;}
 
 /* 댓글창 */
 .comments-section {
@@ -247,6 +248,7 @@ table{width: 80%; height: 800px; border: 1px solid red; margin: 0 auto; font-siz
   background-color: #666;
 }
 
+.r_Btn{border: 1px solid black;}
 
 /* 모달창 */
 .modal{
