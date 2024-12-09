@@ -15,7 +15,6 @@
     let nearestLocation = null;
     let nearestLocation_s = null;
 
-  // 위치 정보를 업데이트하는 함수
   function updateLocation(lat, lon) {
     userLat = lat;
     userLon = lon;
@@ -29,8 +28,11 @@
       url: '/static/좌표데이터.csv',
       dataType: 'text',
       success: function (data) {
-        processCSVData(data, lat, lon);
-      },
+        const nearestLocation = processCSVData(data, lat, lon);
+      if (nearestLocation) {
+        const [시도, 시군구] = nearestLocation.split(" ");
+      }
+    },
       error: function () {
         alert('CSV 파일을 읽는 데 실패했습니다.');
       },
@@ -63,6 +65,7 @@
     // DOM 업데이트
     if (nearestLocation) $("#gps").html(`<h2>${nearestLocation}</h2>`);
     if (nearestLocation_s) $("#gps_s").html(`<h2>${nearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
+    
 
     // 위치 데이터를 sessionStorage에 저장
     sessionStorage.setItem("nearestLocation", nearestLocation);
@@ -87,49 +90,66 @@
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
+          let lat = position.coords.latitude;
+          let lon = position.coords.longitude;
           updateLocation(lat, lon);
           alert("위치 권한이 허용되었습니다.");
+          setTimeout(() => {
+          let nearestLocation = sessionStorage.getItem("nearestLocation")
+          let newUrl = `/board/nboard/?bgps=${nearestLocation}`;
+          window.location.href = newUrl;
+          }, 500); // AJAX 요청이 완료될 시간을 고려하여 약간의 지연 추가
         },
         (error) => {
           switch (error.code) {
             case error.PERMISSION_DENIED:
               alert("위치 권한이 거부되었습니다.");
+              resetLocation(); // 위치 초기화 함수 호출
               break;
             case error.POSITION_UNAVAILABLE:
               alert("위치 정보를 사용할 수 없습니다.");
+              resetLocation();
               break;
             case error.TIMEOUT:
               alert("위치 요청이 시간 초과되었습니다.");
+              resetLocation();
               break;
             default:
               alert("알 수 없는 오류가 발생했습니다.");
+              resetLocation();
           }
         }
       );
     } else {
       alert("이 브라우저는 위치 서비스를 지원하지 않습니다.");
+      resetLocation();
     }
   }
-
-  // 페이지 로드 시 sessionStorage에서 데이터 복원
-  $(document).ready(() => {
-    const storedLat = sessionStorage.getItem("userLat");
-    const storedLon = sessionStorage.getItem("userLon");
-    const storedNearestLocation = sessionStorage.getItem("nearestLocation");
-    const storedNearestLocation_s = sessionStorage.getItem("nearestLocation_s");
-
-    if (storedLat && storedLon) {
-      userLat = parseFloat(storedLat);
-      userLon = parseFloat(storedLon);
-      nearestLocation = storedNearestLocation;
-      nearestLocation_s = storedNearestLocation_s;
-
-      // DOM 복원
-      if (nearestLocation) $("#gps").html(`<h2>${nearestLocation}</h2>`);
-      if (nearestLocation_s) $("#gps_s").html(`<h2>${nearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
-    }
+  
+  function resetLocation() {
+    sessionStorage.removeItem("userLat");
+    sessionStorage.removeItem("userLon");
+    sessionStorage.removeItem("nearestLocation");
+    sessionStorage.removeItem("nearestLocation_s");
+  
+    // 기본 위치 초기화
+    const default_bgps = "서울특별시 강남구";
+    const default_bgps_s = "강남구";
+  
+    // DOM 초기화
+    $("#gps").html(`<h2>${default_bgps}</h2>`);
+    $("#gps_s").html(`<h2>${default_bgps_s} <i class="fa-solid fa-location-dot"></i></h2>`);
+  }
+  
+  // URL에서 bgps_s 파라미터를 직접 처리
+  $(document).ready(function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const current_bgps = urlParams.get("bgps") || "서울특별시 강남구";
+    const current_bgps_s = current_bgps.split(" ").pop(); // 마지막 단어 추출
+  
+    // DOM 업데이트
+    $("#gps").html(`<h2>${current_bgps}</h2>`);
+    $("#gps_s").html(`<h2>${current_bgps_s} <i class="fa-solid fa-location-dot"></i></h2>`);
   });// 1번 끝
     
     // 2. 비로그인 시 사용 제한
@@ -199,27 +219,26 @@ $(document).on("click", "#chgBtn", function() {
         });
 
         // 링크 클릭 시 nearestLocation과 nearestLocation_s 갱신
-        $(".modal_body ul a").on("click", function(e) {
+        $(document).on("click", ".modal_body ul a", function(e) {
+          e.preventDefault();
           const selectedLocation = $(this).text();
           const [시도, 시군구] = selectedLocation.split(" ");
           
-          nearestLocation = selectedLocation;
-          nearestLocation_s = 시군구;
-
-          // 위치 정보 업데이트
-          $("#gps").html(`<h2>${nearestLocation}</h2>`);
-          $("#gps_s").html(`<h2>${nearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
-
-          // 모달 창 닫기
-          modal.style.display = "none";
-          $("body").removeClass("modal-open");
-
-          // bgps 값 업데이트 (URL 파라미터로 bgps를 추가)
-          const newUrl = `/board/nboard/?bgps=${encodeURIComponent(selectedLocation)}&bgps_s=${encodeURIComponent(시군구)}`;
+          // DOM 및 sessionStorage 업데이트
+          $("#gps").html(`<h2>${selectedLocation}</h2>`);
+          $("#gps_s").html(`<h2>${시군구} <i class="fa-solid fa-location-dot"></i></h2>`);
+          sessionStorage.setItem("nearestLocation", selectedLocation);
+          sessionStorage.setItem("nearestLocation_s", 시군구);
           
-          // 새 URL로 이동
+          // 모달 창 닫기
+          $(".modal").hide();
+          $("body").removeClass("modal-open");
+          
+          // URL 업데이트 및 페이지 새로고침
+          const newUrl = `/board/nboard/?bgps=${encodeURIComponent(selectedLocation)}&bgps_s=${encodeURIComponent(시군구)}`;
           window.location.href = newUrl;
-        });
+      });
+      
       } else {
         ul.append("<li>검색 결과가 없습니다.</li>");
       }
@@ -230,15 +249,20 @@ $(document).on("click", "#chgBtn", function() {
   });
 });
 
-$(".modal_body ul a").on("click", function(e) {
-  const selectedLocation = $(this).text();
-  const [시도, 시군구] = selectedLocation.split(" ");
-  
-  // bgps 값 업데이트 (URL 파라미터로 bgps를 추가)
-  const newUrl = `/board/nboard/?bgps=${selectedLocation}`;
+// 페이지 로드 시 데이터 유지
+$(document).ready(function () {
+  let savedNearestLocation = sessionStorage.getItem("nearestLocation") || "서울특별시 강남구";
+  let savedNearestLocation_s = sessionStorage.getItem("nearestLocation_s") || "강남구";
+  let boardbgps = "{{board.bgps}}";
+  // DOM 업데이트
+  if(boardbgps!=sessionStorage.getItem("nearestLocation")){
+    sessionStorage.setItem("nearestLocation") = boardbgps
+    $("#gps").html(`<h2>${boardbgps}</h2>`);
+  }
+  $("#gps").html(`<h2>${savedNearestLocation}</h2>`);
+  $("#gps_s").html(`<h2>${savedNearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
+});
 
-  // 새 URL로 이동
-  window.location.href = newUrl;});
 </script>
 </head>
 <body>
@@ -265,7 +289,7 @@ $(".modal_body ul a").on("click", function(e) {
   <main>
     <form action="#" name="mapping" method="post">
       {% csrf_token %}
-      <button type="button" id="gps_s"><h2>강남구  <i class="fa-solid fa-location-dot"></i></h2></button>
+      <button type="button" id="gps_s"><h2>  <i class="fa-solid fa-location-dot"></i></h2></button>
       <input type="search" id="list_search" placeholder="검색어를 입력해주세요." >
       <button id="seBtn">검색</button>
 
@@ -290,24 +314,24 @@ $(".modal_body ul a").on("click", function(e) {
     </form>
     <div class="here">
       <div class="sub_navloc">HOME&nbsp;&nbsp; <strong><i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp; 게시판</strong></div>
-      <div id="gps"><h2>서울특별시 강남구</h2></div>
+      <div id="gps"><h2>{{current_bgps}}</h2></div>
     </div>
     <div class="board">
       <!-- 카테고리 -->
       <div class="b_category">
         <ul>
-          <li><a href="/board/nboard/?bselect=인기글">인기글 <img src="/static/images/heart.png" id="heart"></a></li><br>
-          <li><a href="/board/nboard/?bgps={{ 시도 }} {{ 시군구 }}&bgps_s={{ 시군구 }}">전체</a></li>
-          <li><a href="/board/nboard/?bselect=추천맛집">추천맛집</a></li><br>
-          <li><a href="/board/nboard/?bselect=감성카페">감성카페</a></li><br>
-          <li><a href="/board/nboard/?bselect=취미">취미</a></li><br>
-          <li><a href="/board/nboard/?bselect=웨이팅">웨이팅</a></li><br>
-          <li><a href="/board/nboard/?bselect=실시간공유">실시간공유</a></li><br>
-          <li><a href="/board/nboard/?bselect=생활/편의">생활/편의</a></li><br>
-          <li><a href="/board/nboard/?bselect=교통">교통</a></li><br>
-          <li><a href="/board/nboard/?bselect=풍경">풍경</a></li><br>
-          <li><a href="/board/nboard/?bselect=사건사고">사건사고</a></li><br>
-          <li><a href="/board/nboard/?bselect=기타">기타</a></li><br>
+          <li><a href="/board/nboard/?bselect=인기글&bgps={{ current_bgps }}">인기글 <img src="/static/images/heart.png" id="heart"></a></li><br>
+          <li><a href="/board/nboard/?bgps={{current_bgps}}">전체</a></li><br>
+          <li><a href="/board/nboard/?bselect=추천맛집&bgps={{ current_bgps }}">추천맛집</a></li><br>
+          <li><a href="/board/nboard/?bselect=감성카페&bgps={{ current_bgps }}">감성카페</a></li><br>
+          <li><a href="/board/nboard/?bselect=취미&bgps={{ current_bgps }}">취미</a></li><br>
+          <li><a href="/board/nboard/?bselect=웨이팅&bgps={{ current_bgps }}">웨이팅</a></li><br>
+          <li><a href="/board/nboard/?bselect=실시간공유&bgps={{ current_bgps }}">실시간공유</a></li><br>
+          <li><a href="/board/nboard/?bselect=생활/편의&bgps={{ current_bgps }}">생활/편의</a></li><br>
+          <li><a href="/board/nboard/?bselect=교통&bgps={{ current_bgps }}">교통</a></li><br>
+          <li><a href="/board/nboard/?bselect=풍경&bgps={{ current_bgps }}">풍경</a></li><br>
+          <li><a href="/board/nboard/?bselect=사건사고&bgps={{ current_bgps }}">사건사고</a></li><br>
+          <li><a href="/board/nboard/?bselect=기타&bgps={{ current_bgps }}">기타</a></li><br>
         </ul>
       </div>
       <!-- 게시판 -->

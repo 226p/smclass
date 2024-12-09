@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse,HttpResponse
 from django.core import serializers # json타입
 from django.db.models import Q
-from django.db.models import F
+from django.db.models import F, Max
 from comment.models import Comment
 from member.models import Member
 from board.models import Board
@@ -19,32 +19,60 @@ def cwrite(request):    ## 하단댓글 저장
   print("cwrite 확인: ", bno, ccontent)
   
   qs = Comment.objects.create(member=member,board=board,ccontent=ccontent)
+  qs.cgroup = qs.cno
+  qs.save()
   list_qs = list(Comment.objects.filter(cno=qs.cno).values())
   print("cwrite qs확인 : ",list_qs)
   context = {"result":"success","comment":list_qs}
   return JsonResponse(context)
 
 def reply(request):
-  cno = request.POST.get("cno")
-  bno = request.POST.get("bno")
-  ccontent = request.POST.get("ccontent")
+    cno = request.POST.get("cno")  # 부모 댓글 ID
+    bno = request.POST.get("bno")  # 게시글 ID
+    ccontent = request.POST.get("ccontent")  # 댓글 내용
 
-  print(cno,bno,ccontent)
-  id = request.session.get('session_id')
-  member = Member.objects.get(id=id)
-  board = Board.objects.get(bno=bno)
-  cgroup = int(request.POST.get("cgroup"))
-  cstep = int(request.POST.get("cstep"))
-  cindent = int(request.POST.get("cindent"))
-  qs = Comment.objects.filter(cgroup=cgroup,cstep__gt=cstep)
-  qs.update(cstep=F('cstep')+1)
+    id = request.session.get('session_id')
+    member = Member.objects.get(id=id)
+    board = Board.objects.get(bno=bno)
 
-  Comment.objects.create(member=member,board=board,ccontent=ccontent,\
-                        cgroup=cgroup+1,cstep=cstep+1,bindent=cindent+1)
+    if cno:  # 대댓글인 경우
+        parent_comment = Comment.objects.get(cno=cno)
+        cgroup = parent_comment.cgroup
+        parent_step = parent_comment.cstep
+        parent_indent = parent_comment.cindent
 
-  context = {'rmsg':cno}
+        # 같은 그룹 내에서 부모 댓글보다 step이 큰 댓글들의 step을 1 증가
+        Comment.objects.filter(cgroup=cgroup, cstep__gt=parent_step).update(cstep=F('cstep') + 1)
 
-  return JsonResponse(context)
+        # 새 댓글의 step과 indent 계산
+        new_step = parent_step + 1
+        new_indent = parent_indent + 1
+
+        # 대댓글 생성
+        new_comment = Comment.objects.create(
+            member=member,
+            board=board,
+            ccontent=ccontent,
+            cgroup=cgroup,
+            cstep=new_step,
+            cindent=new_indent
+        )
+    else:  # 최상위 댓글인 경우
+        max_group = Comment.objects.filter(board=board).aggregate(Max('cgroup'))['cgroup__max'] or 0
+        new_comment = Comment.objects.create(
+            member=member,
+            board=board,
+            ccontent=ccontent,
+            cgroup=max_group + 1,
+            cstep=0,
+            cindent=0
+        )
+
+    return JsonResponse({'result': 'success', 'comment': {
+        'cno': new_comment.cno,
+        'ccontent': new_comment.ccontent,
+        'cdate': new_comment.cdate.strftime('%Y-%m-%d %H:%M:%S')
+    }})
 
 def cdelete(request):    ## 하단댓글 삭제
   cno = request.POST.get("cno")

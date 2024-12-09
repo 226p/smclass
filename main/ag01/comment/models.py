@@ -11,7 +11,7 @@ class Comment(models.Model):
   cdate = models.DateTimeField(auto_now=True)
     
   # 계층형 댓글
-  cgroup = models.IntegerField(default=0)
+  cgroup = models.IntegerField(null=True)
   cstep = models.IntegerField(default=0)
   cindent = models.IntegerField(default=0)
   

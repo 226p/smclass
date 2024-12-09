@@ -303,45 +303,47 @@ $(document).on("click",'.sBtn',function(){
 // 8. 대댓글 기능
 $(document).on("click", ".rBtn", function () {
   const parentCno = $(this).closest("ul").attr("id"); // 부모 댓글 ID
-  if (!$("#reply-box-" + parentCno).length) {
-      $(this).closest("ul").append(`
-          <div id="reply-box-${parentCno}" class="reply-box">
-              <textarea class="replyType" placeholder="답글을 작성하세요."></textarea>
-              <button class="r_Btn" data-parent-cno="${parentCno}">답글 작성</button>
-          </div>
-      `);
-  }
-});
-$(document).on("click", ".r_Btn", function () {
-  const ccontent = $(this).siblings(".replyType").val();
-  const bno = "{{board.bno}}";
-  const parentCno = $(this).closest("ul").attr("id");
+  const bno = "{{ board.bno }}"; // 게시글 ID
   const csrfToken = $("meta[name='csrf_token']").attr("content");
 
-  $.ajax({
-      headers: { "X-CSRFToken": csrfToken },
-      url: "/comment/reply/",
-      type: "post",
-      data: { ccontent: ccontent, bno: bno, cno: parentCno },
-      success: function (data) {
-          if (data.result === "success") {
-              alert("댓글이 등록되었습니다.");
-              location.reload(); // 페이지 새로고침
-          } else {
-              alert("등록에 실패했습니다.");
-          }
-      },
-      error: function () {
-          alert("실패");
-      },
-  });
-  $("#chg").val("")
-});
+  const replyBox = `
+      <li class="txt">
+        <textarea class="replyType" style="width: 100%; height: 100px;"></textarea>
+        <button class="r_Btn rebtn">답글 등록</button>
+        <button class="c_Btn rebtn">취소</button>
+      </li>`;
+  $(this).closest("ul").append(replyBox);
 
-if ("{{rmsg}}" != ""){
-  alert("답글이 작성되었습니다.")
-  location.href="/board/bbview/{{board.bno}}/";
-}
+  $(document).on("click", ".r_Btn", function () {
+      const ccontent = $(this).siblings(".replyType").val();
+      if (ccontent.length < 2) {
+          alert('답글은 두 글자 이상이어야 합니다.');
+          return;
+      }
+
+      $.ajax({
+          headers: { "X-CSRFToken": csrfToken },
+          url: "/comment/reply/",
+          type: "post",
+          data: { cno: parentCno, bno: bno, ccontent: ccontent },
+          success: function (data) {
+              if (data.result === "success") {
+                  alert("답글이 등록되었습니다.");
+                  location.reload();
+              } else {
+                  alert("답글 등록 실패. 다시 시도해주세요.");
+              }
+          },
+          error: function () {
+              alert("서버 요청 실패. 다시 시도해주세요.");
+          }
+      });
+  });
+
+  $(document).on("click", ".c_Btn", function () {
+      $(this).closest(".txt").remove();
+  });
+});
 // 8번 끝
 </script>
 </head>
@@ -500,12 +502,16 @@ if ("{{rmsg}}" != ""){
 						  {% for comment in clist %}
                 <ul id="{{comment.cno}}">
                   <div class="comment">
+                    {% if comment.cindent > 0  %}
+                      {% for i in ""|rjust:comment.cindent  %}<img src="/static/images/reply.png" style="width: 30px; height: 30px; margin: 0;">{% endfor %}
+                    {% endif %}
                     <li class="name">{{comment.member.nickname}} <span>[ {{comment.cdate|date:'Y-m-d  H:i:s'}}]</span></li>
                     <span>
                     {% if request.session.session_id == comment.member.id  %}
                       <li class="btn">
                         <a class="uBtn rebtn">수정</a>
                         <a class="dBtn rebtn">삭제</a>
+                        <a class="rBtn rebtn">답글</a>
                       </li>
                     {% else %}
                       <li class="btn">

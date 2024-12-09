@@ -9,73 +9,69 @@ from django.http import JsonResponse,HttpResponse
 from comment.models import Comment
 
 def nboard(request):  
-    if request.method == 'GET':
-        # bselect 파라미터 처리
-        bselect = request.GET.get("bselect", "전체")
-        print("bselect : ", bselect)
+  if request.method == 'GET':
+    # 파라미터 처리
+    bselect = request.GET.get("bselect", "전체")
+    bgps = request.GET.get('bgps', '서울특별시 강남구')  
 
-        # 기본 QuerySet 정의
-        qs = Board.objects.annotate(comment_count=Count('comment', distinct=True))
+    # 기본 QuerySet 정의
+    qs = Board.objects.annotate(comment_count=Count('comment', distinct=True))
 
-        # bgps 파라미터 처리
-        bgps = request.GET.get('bgps', '')  # bgps 파라미터를 가져옵니다
+    # 필터링 조건
+    is_popular = bselect == "인기글"
 
-        if bselect == "전체":
-            if bgps:  # bgps 값이 있으면 해당 값으로 필터링
-                qs = qs.filter(bgps__contains=bgps).order_by("-bgroup", "bstep", '-comment_count')
-            else:  # bgps 값이 없으면 전체 게시글을 가져옵니다
-                qs = qs.order_by('-bgroup', 'bstep', '-comment_count')
-        elif bselect == "인기글":
-            qs = qs.order_by("-like_member", '-comment_count')
-        else:
-            qs = qs.filter(bselect=bselect).order_by("-bgroup", "bstep", '-comment_count')
+    if bgps:
+        qs = qs.filter(bgps__contains=bgps)
 
-        if qs.exists():  # 게시글이 있을 경우
-            print("첫 번째 게시글 댓글 수 : ", qs[0].comment_count)
-        else:  # 게시글이 없을 경우
-            print("게시글이 없습니다.")
+    if bselect != "전체" and not is_popular:
+        qs = qs.filter(bselect=bselect)
 
-        # 페이지 처리
-        npage = int(request.GET.get('npage', 1))
-        print("npage:", npage)
-
-        paginator = Paginator(qs, 10)
-        blist = paginator.get_page(npage)
-
-        # 각 게시글에 해당하는 댓글 수를 계산
-        comment_counts = {board.bno: Comment.objects.filter(board=board).count() for board in blist}
-
-        # 시도, 시군구 파라미터 처리
-        시도 = ''
-        시군구 = ''
-        if bgps:  # bgps 값이 있다면, 시도와 시군구를 분리
-            시도, 시군구 = bgps.split(" ", 1)  # 시도와 시군구를 공백을 기준으로 분리
-
-        # 지역 목록 예시 (필요에 따라 수정)
-        areas = [
-            "서울특별시 강남구", 
-            "서울특별시 송파구", 
-            "경기도 성남시",
-            "서울특별시 강서구",
-            "경기도 부천시",
-            "인천광역시 서구",
-            "경기도 남양주시"
-        ]
-
-        context = {
-            "blist": blist,
-            'npage': npage,
-            'comment_counts': comment_counts,
-            '시도': 시도,  # 시도 정보 템플릿에 전달
-            '시군구': 시군구,  # 시군구 정보 템플릿에 전달
-            'areas': areas,  # 지역 목록
-            'current_bgps': bgps  # 현재 선택된 bgps 값 전달
-        }
-
-        return render(request, 'nboard.html', context)
-
+    # 정렬 순서 설정
+    if is_popular:
+        qs = qs.order_by("-like_member", '-comment_count')
     else:
-        return render(request, 'nboard.html')
+        qs = qs.order_by("-bgroup", "bstep", '-comment_count')
+
+    # 페이지 처리
+    npage = int(request.GET.get('npage', 1))
+    paginator = Paginator(qs, 10)
+    blist = paginator.get_page(npage)
+
+    # 댓글 수 계산
+    comment_counts = {board.bno: Comment.objects.filter(board=board).count() for board in blist}
+
+    # 시도, 시군구 파라미터 분리
+    시도, 시군구 = '', ''
+    if bgps:
+        try:
+            시도, 시군구 = bgps.split(" ", 1)
+        except ValueError:
+            시도, 시군구 = bgps, ''
+
+    # 지역 목록 예시
+    areas = [
+        "서울특별시 강남구", 
+        "서울특별시 송파구", 
+        "경기도 성남시",
+        "서울특별시 강서구",
+        "경기도 부천시",
+        "인천광역시 서구",
+        "경기도 남양주시"
+    ]
+
+    context = {
+        "blist": blist,
+        'npage': npage,
+        'comment_counts': comment_counts,
+        '시도': 시도,
+        '시군구': 시군구,
+        'areas': areas,
+        'current_bgps': bgps,
+        'bselect': bselect
+    }
+
+    return render(request, 'nboard.html', context)
+  else: return render(request, 'nboard.html')
 
 def bwrite(request):    # 1. 게시판글작성 호출 / 2. 게시판 글 작성 저장
   if request.method == 'GET':
@@ -118,12 +114,20 @@ def bbview(request,bno):    # 1. 게시글 상세보기 / 2. 좋아요 클릭 / 
   next_qs = Board.objects.filter(Q(bgroup__lt=qs.bgroup,bstep__lte=qs.bstep)|Q(bgroup=qs.bgroup,bstep__gt=qs.bstep)).order_by('-bgroup','bstep').first()
   prev_qs = Board.objects.filter(Q(bgroup__gt=qs.bgroup,bstep__gte=qs.bstep)|Q(bgroup=qs.bgroup,bstep__lt=qs.bstep)).order_by('bgroup','-bstep').first()
   
-  c_qs = Comment.objects.filter(board=qs).order_by("-cno")
+  c_qs = Comment.objects.filter(board=qs).order_by("-cgroup","cstep","cdate")
   print("확인 : ",c_qs,c_qs.count)
+
+  bgps = request.GET.get('bgps', '') 
+  시도, 시군구 = '', ''
+  if bgps:
+      try:
+          시도, 시군구 = bgps.split(" ", 1)
+      except ValueError:
+          시도, 시군구 = bgps, ''
   
   day1 = datetime.replace(datetime.now(),hour=23,minute=59,second=59)
   expires = datetime.strftime(day1,"%a, %d-%b-%Y %H:%M:%S GMT")
-  context = {'board':qs,'prev_qs':prev_qs,'next_qs':next_qs,"result":result,"count":count,"clist":c_qs}
+  context = {'board':qs,'prev_qs':prev_qs,'next_qs':next_qs,"result":result,"count":count,"clist":c_qs,'current_bgps': bgps}
   response = render(request,'bbview.html',context)
 
   if request.COOKIES.get("cookie_boardNo") is not None:
