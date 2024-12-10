@@ -4,10 +4,12 @@ from . import views
 app_name = 'map'
 urlpatterns = [
     path('mview/', views.mview, name='mview'),
-    path('test/', views.test, name='test'),
-    path('test2/', views.test2, name='test2'),
-    path('test3/', views.test3, name='test3'),
+    path('success/', views.success, name='success'),
     path('test4/', views.test4, name='test4'),
     path('test5/', views.test5, name='test5'),
+    path('test6/', views.test6, name='test6'),
+    path('test7/', views.test7, name='test7'),
+    path('test8/', views.test8, name='test8'),
+    path('test9/', views.test9, name='test9'),
 ]
 

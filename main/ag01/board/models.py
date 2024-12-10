@@ -2,7 +2,7 @@ from django.db import models
 from member.models import Member
 
 CHOICES = {
-      ('추천맛집','추천맛집😋'), #오른쪽에 있는 것이 화면에 보인다.
+      ('추천맛집','추천맛집😋'), # 오른쪽에 있는 것이 화면에 보인다.
       ('감성카페', '감성카페☕'),
       ('취미', '취미🎮'),
       ('웨이팅', '웨이팅👥'),

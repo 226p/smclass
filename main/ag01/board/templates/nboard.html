@@ -151,7 +151,7 @@
     $("#gps").html(`<h2>${current_bgps}</h2>`);
     $("#gps_s").html(`<h2>${current_bgps_s} <i class="fa-solid fa-location-dot"></i></h2>`);
   });// 1번 끝
-    
+//--------------------------------------------------------------------------------------------
     // 2. 비로그인 시 사용 제한
     $(function() {
       $(document).on("click","#no_mem",function(){
@@ -162,7 +162,7 @@
         }
       });
     });// 2번 끝
-
+//--------------------------------------------------------------------------------------------
     // 3. 게시글 삭제
     if ("{{dmsg}}" != ""){
       if(confirm("{{dmsg}}번 게시글을 삭제하겠습니까?")){
@@ -171,7 +171,7 @@
         location.href="/board/nboard/"
       }
     }// 3번 끝
-
+//--------------------------------------------------------------------------------------------
   // 4. 모달창에 주소 입력 시
 $(document).on("click", "#chgBtn", function() {
   const searchQuery = $("#chg").val(); // 검색어 입력받기
@@ -247,9 +247,9 @@ $(document).on("click", "#chgBtn", function() {
       alert("CSV 파일을 읽는 데 실패했습니다.");
     }
   });
-});
-
-// 페이지 로드 시 데이터 유지
+});// 4번 끝
+//--------------------------------------------------------------------------------------------
+// 5. 페이지 로드 시 데이터 유지
 $(document).ready(function () {
   let savedNearestLocation = sessionStorage.getItem("nearestLocation") || "서울특별시 강남구";
   let savedNearestLocation_s = sessionStorage.getItem("nearestLocation_s") || "강남구";
@@ -261,8 +261,8 @@ $(document).ready(function () {
   }
   $("#gps").html(`<h2>${savedNearestLocation}</h2>`);
   $("#gps_s").html(`<h2>${savedNearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
-});
-
+});// 5번 끝
+//--------------------------------------------------------------------------------------------
 </script>
 </head>
 <body>
@@ -285,6 +285,7 @@ $(document).ready(function () {
     </div>
     <hr>
   </header>
+  <!-- 헤더 끝 -->
   <!-- 메인 실행 -->
   <main>
     <form action="#" name="mapping" method="post">
@@ -405,6 +406,7 @@ $(document).ready(function () {
       </ul>
     </div>
   </main>
+  <!-- 메인 끝 -->
   <!-- 하단 부분 -->
   <footer>
     <div class="footer">
@@ -445,7 +447,7 @@ $(document).ready(function () {
   </footer>
 
   <script>
-    // 2. 모달창 클릭
+    // 6. 모달창 클릭
     const modal = document.querySelector('.modal');
     const btnOpenModal=document.querySelector('#gps_s');
     const btnCloseModal=document.querySelector('#closeBtn');
@@ -457,7 +459,7 @@ $(document).ready(function () {
     btnCloseModal.addEventListener("click", ()=>{
         modal.style.display="none";
         $("body").removeClass("modal-open");
-    });//2번 끝
+    });//6번 끝
   </script>
 </body>
 </html>

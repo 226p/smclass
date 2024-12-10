@@ -34,7 +34,7 @@ h4{margin: 50px; font-size: 25px;}
 .here>h2{font-size: 30px; margin: 10px auto;}
 
 /* 지도 */
-#mapping{width: 750px; height: 50px; margin: 10px; position: relative;}
+#searchKeyword{width: 750px; height: 50px; margin: 10px; position: relative;}
 .f_category{margin: 0 auto; position: relative;}
 .f_category>span{margin: 18px; }
 .m_info{width: 100%; height: 200px; box-sizing: border-box; margin: 0 auto; text-align: center;}
