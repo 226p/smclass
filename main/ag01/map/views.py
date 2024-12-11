@@ -23,3 +23,6 @@ def test8(request):
 
 def test9(request):
   return render(request, 'test9.html')
+
+def weather(request):
+  return render(request, 'weather.html')
