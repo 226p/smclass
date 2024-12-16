@@ -26,12 +26,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
-    'foodBoard',
-    'map',
-    'board',
-    'member',
-    'comment',
+    'home',     # h
+    'event',     # h
+    'coupon',     # h
+    'foodBoard',    # c
+    'Brand',    # c
+    'map',    # w
+    'board',    # w
+    'comment',    # w
+    'member',    # s
+    'FoodCafe', # c
 ]
 
 MIDDLEWARE = [
@@ -45,11 +49,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ag01.urls'
-
+TEMPLATES_DIRS = os.path.join(BASE_DIR,'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIRS],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -61,6 +65,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'ag01.wsgi.application'
 

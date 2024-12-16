@@ -12,7 +12,8 @@ def nboard(request):
   if request.method == 'GET':
     # 파라미터 처리
     bselect = request.GET.get("bselect", "전체")
-    bgps = request.GET.get('bgps', '서울특별시 강남구')  
+    bgps = request.GET.get('bgps', '서울특별시 강남구')
+    list_search = request.GET.get('list_search', '').strip()
 
     # 기본 QuerySet 정의
     qs = Board.objects.annotate(comment_count=Count('comment', distinct=True))
@@ -25,6 +26,10 @@ def nboard(request):
 
     if bselect != "전체" and not is_popular:
         qs = qs.filter(bselect=bselect)
+
+    # 제목 검색 조건 추가 (부분 일치 검색)
+    if list_search:
+        qs = qs.filter(Q(btitle__icontains=list_search) | Q(bcontent__icontains=list_search))
 
     # 정렬 순서 설정
     if is_popular:
@@ -67,11 +72,28 @@ def nboard(request):
         '시군구': 시군구,
         'areas': areas,
         'current_bgps': bgps,
-        'bselect': bselect
+        'bselect': bselect,
+        'list_search': list_search
     }
-
     return render(request, 'nboard.html', context)
-  else: return render(request, 'nboard.html')
+
+  else:
+    # 폼에서 검색어를 가져옵니다.
+    search_keyword = request.POST.get('list_search', '').strip()  # search_keyword는 공백 제거한 검색어입니다.
+    print(search_keyword)
+    
+    if search_keyword:
+      # btitle에 검색어가 포함된 게시물들을 필터링합니다.
+      blist = Board.objects.filter(btitle=search_keyword)  # 대소문자 구분 없이 검색
+      num = '1'
+    else:
+      # 검색어가 없으면 모든 게시물을 가져옵니다.
+      blist = Board.objects.all()
+      num = '0'
+
+    context = {'blist': blist, 'num': num, 'search_keyword':search_keyword}
+    
+  return render(request, 'nboard.html', context)
 
 def bwrite(request):    # 1. 게시판글작성 호출 / 2. 게시판 글 작성 저장
   if request.method == 'GET':
