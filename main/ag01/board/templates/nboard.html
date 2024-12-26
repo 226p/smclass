@@ -1,13 +1,8 @@
+{% extends "base.html" %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" type="text/css" href="{% static '/css/nboard.css' %}">
-  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-  <title>ANG-GGO</title>
+{% block extrahead %}
+  <title>앙꼬 게시판 | 게시판</title>
   <script>
     // 1. 모달창 위치정보 수집 동의
     let userLat = null;
@@ -205,7 +200,7 @@ $(document).on("click", "#chgBtn", function() {
       }
 
       // 결과 출력하기
-      const ul = $(".modal_body ul");
+      const ul = $(".modal_bbody ul");
       ul.empty(); // 기존 목록 초기화
 
       // Set에서 최대 8개까지 출력
@@ -219,7 +214,7 @@ $(document).on("click", "#chgBtn", function() {
         });
 
         // 링크 클릭 시 nearestLocation과 nearestLocation_s 갱신
-        $(document).on("click", ".modal_body ul a", function(e) {
+        $(document).on("click", ".modal_bbody ul a", function(e) {
           e.preventDefault();
           const selectedLocation = $(this).text();
           const [시도, 시군구] = selectedLocation.split(" ");
@@ -231,7 +226,7 @@ $(document).on("click", "#chgBtn", function() {
           sessionStorage.setItem("nearestLocation_s", 시군구);
           
           // 모달 창 닫기
-          $(".modal").hide();
+          $(".modal_board").hide();
           $("body").removeClass("modal-open");
           
           // URL 업데이트 및 페이지 새로고침
@@ -263,40 +258,63 @@ $(document).ready(function () {
   $("#gps_s").html(`<h2>${savedNearestLocation_s} <i class="fa-solid fa-location-dot"></i></h2>`);
 });// 5번 끝
 //--------------------------------------------------------------------------------------------
+$(document).ready(function() {
+  // 검색 버튼 클릭 시 AJAX로 데이터 요청
+  $('#seBtn').on('click', function(e) {
+    e.preventDefault(); // 기본 폼 제출 막기
+
+    let searchKeyword = $('#list_search').val(); // 검색어 가져오기
+    let nearestLocation = sessionStorage.getItem("nearestLocation") || "서울특별시 강남구"; // 위치 정보 가져오기
+
+    $.ajax({
+      url: "/board/nboard/", // 서버 요청 URL
+      type: "GET",
+      data: {
+        list_search: searchKeyword,
+        bgps: nearestLocation,
+      },
+      success: function(response) {
+        // 기존 게시판 내용 지우기
+        $('.nlist').empty();
+
+        if (response.blist.length > 0) {
+          // 가져온 게시글 데이터를 동적으로 추가
+          response.blist.forEach(function(board) {
+            let postHtml = `
+              <ul>
+                <li>
+                  <h3>${board.btitle}</h3>
+                  <p>${board.bcontent}</p>
+                  <span>${board.bgps} | ${board.bselect} | ${board.bdate}</span>
+                </li>
+              </ul>`;
+            $('.nlist').append(postHtml);
+          });
+        } else {
+          $('.nlist').append('<ul><li style="font-size: 20px">검색된 단어의 게시글이 없습니다.</li></ul>');
+        }
+      },
+      error: function() {
+        alert("데이터를 불러오는 데 실패했습니다.");
+      }
+    });
+  });
+});
 </script>
-</head>
+{% endblock %}
+{% block content %}
 <body>
-  <!-- 헤더 부분 -->
-  <header>
-    <div class="inner">
-      <a href="/"><span class="main_logo">로고</span></a>
-      <ul>
-        <a href="/map/success/"><li>지도</li></a>
-        <a href="/foodBoard/foodList/"><li>맛집추천</li></a>
-        <a href="/board/nboard/"><li>게시판</li></a>
-        <li>예약</li>
-        <li>이벤트</li>
-        <a href="/Brand/"><li>브랜드 소개</li></a>
-      </ul>
-      <span>
-        <button type="button" class="ag_my"><a href="/member/login/">로그인/회원가입</a></button>
-        <button type="button" class="ag_my"><a href="/member/logout/">로그아웃</a></button>
-      </span>
-    </div>
-    <hr>
-  </header>
-  <!-- 헤더 끝 -->
   <!-- 메인 실행 -->
   <main>
-    <form action="/board/nboard/" name="mapping" method="post">
+    <form action="/board/nboard/" name="mapping" method="get">
       {% csrf_token %}
       <button type="button" id="gps_s"><h2>  <i class="fa-solid fa-location-dot"></i></h2></button>
-      <input type="search" id="list_search" name="list_search" placeholder="검색어를 입력해주세요." >
+      <input type="search" id="list_search" name="list_search" value="{{ list_search }}" placeholder="검색어를 입력해주세요." >
       <button id="seBtn">검색</button>
 
       <!-- 위치 모달창 -->
-      <div class="modal">
-        <div class="modal_body">
+      <div class="modal_board">
+        <div class="modal_bbody">
             <h2>지역 변경</h2>
             <hr>
             <input type="text" name="chg" id="chg">
@@ -339,144 +357,97 @@ $(document).ready(function () {
       <div class="nlist">
         {% if blist %}
           {% for board in blist %}
-          <ul>
-            {% if request.session.session_id%}
-              <a href="/board/bbview/{{board.bno}}/"><li>
-                <h3>{{board.btitle}}</h3>
-                <p>{{board.bcontent|striptags}}</p>
-                <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
-                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{board.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;{{board.comment_count}}</span><br>
+            {% if request.session.session_id %}
+            <ul>
+              <a href="/board/bbview/{{board.bno}}/">
+                <li>
+                  <h3>{{ board.btitle }}</h3>
+                  <p>{{ board.bcontent|striptags }}</p>
+                  <span>{{ board.bgps }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ board.bselect }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ board.bdate|date:'Y-m-d' }}</span><br>
+                  <span>
+                    <i class="fa-regular fa-thumbs-up"></i>&nbsp;{{ board.like_member.count }}&nbsp;&nbsp;
+                    <i class="fa-regular fa-comment"></i>&nbsp;{{ board.comment_count }}
+                  </span><br>
                   {% if board.bfile %}
-                  <img id="viewimg" src="{{board.bfile.url}}">
-                  {% else %}
+                  <img id="viewimg" src="{{ board.bfile.url }}">
                   {% endif %}
-              </li></a>
+                </li>
+              </a>
+            </ul>
             {% else %}
-              <a><li id="no_mem">
-                <h3>{{board.btitle}}</h3>
-                <p>{{board.bcontent|striptags}}</p>
-                <span>{{board.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{board.bdate|date:'Y-m-d'}}</span><br>
-                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{board.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;{{board.comment_count }}</span><br>
+            <ul>
+              <a>
+                <li id="no_mem">
+                  <h3>{{ board.btitle }}</h3>
+                  <p>{{ board.bcontent|striptags }}</p>
+                  <span>{{ board.bgps }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ board.bselect }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ board.bdate|date:'Y-m-d' }}</span><br>
+                  <span>
+                    <i class="fa-regular fa-thumbs-up"></i>&nbsp;{{ board.like_member.count }}&nbsp;&nbsp;
+                    <i class="fa-regular fa-comment"></i>&nbsp;{{ board.comment_count }}
+                  </span><br>
                   {% if board.bfile %}
-                  <img id="viewimg" src="{{board.bfile.url}}">
-                  {% else %}
+                  <img id="viewimg" src="{{ board.bfile.url }}">
                   {% endif %}
-              </li></a>
+                </li>
+              </a>
+            </ul>
             {% endif %}
-          </ul>
           {% endfor %}
+        {% else %}
+          {% if list_search %}
+          <!-- 검색 결과가 없을 때 -->
+          <ul>
+            <li style="font-size: 20px">검색된 단어의 게시글이 없습니다. 😢</li>
+          </ul>
           {% else %}
+          <!-- 게시글 자체가 없을 때 -->
           <ul>
             <li style="font-size: 20px">게시글이 없습니다. 첫 게시글을 작성해주세요!! 🤩</li>
           </ul>
+          {% endif %}
         {% endif %}
-        {% if list_search %}
-          {% for list in list_search %}
-          <ul>
-            {% if request.session.session_id%}
-              <a href="/board/bbview/{{board.bno}}/"><li>
-                <h3>{{list.btitle}}</h3>
-                <p>{{list.bcontent|striptags}}</p>
-                <span>{{list.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{list.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{list.bdate|date:'Y-m-d'}}</span><br>
-                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{list.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;{{list.comment_count}}</span><br>
-                  {% if list.bfile %}
-                  <img id="viewimg" src="{{board.bfile.url}}">
-                  {% else %}
-                  {% endif %}
-              </li></a>
-            {% else %}
-              <a><li id="no_mem">
-                <h3>{{list.btitle}}</h3>
-                <p>{{list.bcontent|striptags}}</p>
-                <span>{{list.bgps}}&nbsp;&nbsp;|&nbsp;&nbsp;{{list.bselect}}&nbsp;&nbsp;|&nbsp;&nbsp;{{list.bdate|date:'Y-m-d'}}</span><br>
-                <span><i class="fa-regular fa-thumbs-up"></i>&nbsp;{{list.like_member.count}}&nbsp;&nbsp;<i class="fa-regular fa-comment"></i>&nbsp;{{list.comment_count }}</span><br>
-                  {% if list.bfile %}
-                  <img id="viewimg" src="{{list.bfile.url}}">
-                  {% else %}
-                  {% endif %}
-              </li></a>
-            {% endif %}
-          </ul>
-          {% endfor %}
-        {% endif %}
-      </div>
-      <!-- 로그인한 사람만 글쓰기 가능 -->
+        <!-- 로그인한 사람만 글쓰기 가능 -->
       {%if request.session.session_id%}
       <a id="add" href="/board/bwrite/"><i class="fa-solid fa-plus"></i></a>
       {% else %}
       {% endif %}
-    </div>
-    <div class="bottom">
-      <ul class="page-num">
-        <!-- 이전페이지 확인 -->
-        {% if blist.has_previous %}
-          <a class="plz" href="/board/nboard/?npage=1"><li class="first"></li></a>
-          <a class="plz" href="/board/nboard/?npage={{blist.previous_page_number}}"><li class="prev"></li></a>
-        {% else %}
-          <a class="plz"><li class="first"></li></a>
-          <a class="plz"><li class="prev"></li></a>
-        {% endif %}
-        <!-- 순차페이지 넘버링 -->
-        {% for page in blist.paginator.page_range %}
-        {% if page != npage %}
-          <a href="/board/nboard/?npage={{page}}"><li class="num"><div>{{page}}</div></li></a>
-        {% else %}
-          <li class="num on"><div>{{page}}</div></li>
-        {% endif %}
-        {% endfor %}
-        <!-- 다음페이지 확인 -->
-        {% if blist.has_next %}
-          <a class="plz" href="/board/nboard/?npage={{blist.next_page_number}}"><li class="next"></li></a>
-          <a class="plz" href="/board/nboard/?npage={{blist.paginator.num_pages}}"><li class="last"></li></a>
-        {% else %}
-          <a class="plz"><li class="next"></li></a>
-          <a class="plz"><li class="last"></li></a>
-        {% endif %}
-      </ul>
-    </div>
+      </div>
+      <div class="bottom">
+        <ul class="page-num">
+          <!-- 이전페이지 확인 -->
+          {% if blist.has_previous %}
+            <a class="plz" href="/board/nboard/?npage=1"><li class="first"></li></a>
+            <a class="plz" href="/board/nboard/?npage={{blist.previous_page_number}}"><li class="prev"></li></a>
+          {% else %}
+            <a class="plz"><li class="first"></li></a>
+            <a class="plz"><li class="prev"></li></a>
+          {% endif %}
+          <!-- 순차페이지 넘버링 -->
+          {% for page in blist.paginator.page_range %}
+          {% if page != npage %}
+            <a href="/board/nboard/?npage={{page}}"><li class="num"><div>{{page}}</div></li></a>
+          {% else %}
+            <li class="num on"><div>{{page}}</div></li>
+          {% endif %}
+          {% endfor %}
+          <!-- 다음페이지 확인 -->
+          {% if blist.has_next %}
+            <a class="plz" href="/board/nboard/?npage={{blist.next_page_number}}"><li class="next"></li></a>
+            <a class="plz" href="/board/nboard/?npage={{blist.paginator.num_pages}}"><li class="last"></li></a>
+          {% else %}
+            <a class="plz"><li class="next"></li></a>
+            <a class="plz"><li class="last"></li></a>
+          {% endif %}
+        </ul>
+      </div>
+
   </main>
   <!-- 메인 끝 -->
-  <!-- 하단 부분 -->
-  <footer>
-    <div class="footerr">
-        <div class="ftnavi">
-            <ul>
-                <li><a href="">회사소개</a></li>
-                <li><a href="">오시는길</a></li>
-                <li><a href="">개인정보처리방침</a></li>
-                <li><a href="">영상정보처리기기운영관리방침</a></li>
-                <li><a href="">이용약관</a></li>
-                <li><a href="">이메일무단수집거부</a></li>
-            </ul>
-        </div>
-        <div class="bottom_footer">
 
-            <div class="addr">
-                <p>앙꼬<span>|</span>서울 금천구 가산디지털2로 101</p>
-                <p class="tel">대표번호 : 070-777-7777&nbsp;&nbsp;
-                    <span>예약문의 : 7777-7777</span>
-                    <span>단체문의 : 02-7171-1717</span>
-                    <span>분양문의 : 02-737-3737</span>
-                    <span>통신판매업신고 : 2024-서울금천-1213호</span>
-                </p>
-                <p>메리츠화재와 개인정보 배상책임보험 계약을 체결하여 회원 개인정보를 보호하고 있습니다.</p>
-                <p class="copy">COPYRIGHT(C) ANGGGO. ALL RIGHTS RESERVED.</p>
-            </div>
-            <!-- <div class="right"> -->
-            <div class="sns">
-                <a href="#"><img src="/static/images/main/insta_btn_fnew.png"></a>
-                <a href="#"><img src="/static/images/main/youtube_btn_fnew.png"></a>
-                <a href="#"><img src="/static/images/main/facebook_btn_fnew.png"></a>
-                <a href="#"><img src="/static/images/main/kakao_ch_btn_fnew.png"></a>
-            </div>
-        </div>
-        <!-- </div> -->
-    </div>
-</footer>
 
   <script>
     // 6. 모달창 클릭
-    const modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal_board');
     const btnOpenModal=document.querySelector('#gps_s');
     const btnCloseModal=document.querySelector('#closeBtn');
 
@@ -489,5 +460,5 @@ $(document).ready(function () {
         $("body").removeClass("modal-open");
     });//6번 끝
   </script>
-</body>
-</html>
+  
+  {% endblock %}
